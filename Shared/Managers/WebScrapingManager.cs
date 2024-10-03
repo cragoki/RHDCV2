@@ -2,10 +2,12 @@
 using DAL.Enums;
 using HtmlAgilityPack;
 using Microsoft.Extensions.Configuration;
+using Shared.Helpers;
 using Shared.Managers.Interfaces;
 using Shared.Models;
 using Shared.Models.ScrapingModels;
 using System.Net;
+using System.Text.RegularExpressions;
 
 namespace Shared.Managers
 {
@@ -60,18 +62,19 @@ namespace Shared.Managers
             return htmlDoc;
         }
 
-        public async Task AddAutoretrieverLog(DateTime date, bool success)
+        public async Task AddAutoretrieverLog(DateTime date, bool success, string note)
         {
             _context.tb_auto_retriever_log.Add(new DAL.Entities.AutoRetrieverLog()
             {
                 DateRetrieved = date,
-                Success = success
+                Success = success,
+                Note = note
             });
 
             await _context.SaveChangesAsync();
         }
 
-        public async Task ScrapeAllData(HtmlDocument htmlDoc, DateTime raceDate) 
+        public async Task<List<EventModel>> ScrapeAllData(HtmlDocument htmlDoc, DateTime raceDate) 
         {
             var eventData = ScrapeEventData(htmlDoc, raceDate);
             
@@ -87,6 +90,8 @@ namespace Shared.Managers
                 }
             
             }
+
+            return eventData;
         }
 
         private List<EventModel> ScrapeEventData(HtmlDocument htmlDoc, DateTime raceDate)
@@ -115,8 +120,9 @@ namespace Shared.Managers
         private async Task<List<RaceModel>> ScrapeRaceData(HtmlDocument htmlDoc, EventModel e)
         {
             var result = new List<RaceModel>();
-
-            var raceContainer = htmlDoc.DocumentNode.SelectSingleNode("//div[contains(@id,'todays-results-" + e.CourseName + "')]");
+            //Using Regex to filter out brackets, and anything within the brackets
+            var courseNameForURL = Regex.Replace(e.CourseName, @"\s?\(.*?\)", "");
+            var raceContainer = htmlDoc.DocumentNode.SelectSingleNode("//div[contains(@id,'todays-results-" + courseNameForURL + "')]");
             var raceData = raceContainer.SelectNodes(".//article");
 
             foreach (var race in raceData) 
@@ -141,12 +147,29 @@ namespace Shared.Managers
                 var classAndAges = raceHeader.SelectSingleNode(".//p[not(@class)]").InnerHtml;
                 var classAndAgesSplit = classAndAges.Split("|");
 
+                var c = "";
+                var a = "";
+
+                //Irish Races don't have classes
                 if (classAndAgesSplit.Count() < 2)
                 {
-                    throw new Exception("Failed to Scrape. Class and Age Group not formatted as expected");
+                    c = "0";
+                    a = classAndAgesSplit[0].Trim();
                 }
-                toAdd.Class = classAndAgesSplit[0].Trim().ToLower().Replace("class ", "");
-                toAdd.AgeCategoryName = classAndAgesSplit[1].Trim();
+                //Cut out division
+                else if (classAndAgesSplit.Count() > 2) 
+                {
+                    c = classAndAgesSplit[1].Trim().ToLower().Replace("class ", "");
+                    a = classAndAgesSplit[2].Trim();
+                }
+                else
+                {
+                    c = classAndAgesSplit[0].Trim().ToLower().Replace("class ", "");
+                    a = classAndAgesSplit[1].Trim();
+                }
+
+                toAdd.Class = c;
+                toAdd.AgeCategoryName = a;
 
                 //Get the Going
                 var raceDetailsDiv = raceHtml.DocumentNode.SelectSingleNode("//div[contains(@class,'race-header__details--secondary')]");
@@ -171,32 +194,42 @@ namespace Shared.Managers
 
             var racePage = await Scrape(race.RaceUrl!);
             var raceContainer = racePage.DocumentNode.SelectSingleNode("//div[contains(@class,'card__content')]");
-            var raceHorseContainers = raceContainer.SelectNodes(".//div[contains(@class, 'card-entry')]");
+            var raceHorseContainers = raceContainer.SelectNodes(".//div[contains(@class, 'card-entry') and not(contains(@class, 'card-entry--non-runner'))]");
 
             foreach (var container in raceHorseContainers) 
             {
                 var raceHorse = new RaceHorseModel();
-                var position = container.SelectSingleNode(".//span[contains(@class,'p--large')]").InnerHtml;
-                var horseName = container.SelectSingleNode(".//a[contains(@class,'horse__link')]").InnerHtml;
-                var odds = container.SelectSingleNode(".//div[contains(@class,'card-cell--odds')]").InnerHtml;
-                var ageAndWeight = container.SelectSingleNode(".//div[contains(@class,'card-cell--stats')]").InnerHtml.Trim(); // THis is broken...
-                var age = ageAndWeight.Split(" ")[0];
-                var weight = ageAndWeight.Split(" ")[1];
+                var position = HTMLAgilityPackHelpers.GetTextOnlyFromDiv(container.SelectSingleNode(".//span[contains(@class,'p--large')]"));
+                var horseName = HTMLAgilityPackHelpers.GetTextOnlyFromDiv(container.SelectSingleNode(".//a[contains(@class,'horse__link')]"));
+                var odds = HTMLAgilityPackHelpers.GetTextOnlyFromDiv(container.SelectSingleNode(".//div[contains(@class,'card-cell--odds')]"));
+                var ageAndWeight = container.SelectSingleNode(".//div[contains(@class,'card-cell--stats')]");
+                var ageAndWeightSplit = ageAndWeight.InnerText.Trim().Split("\r\n");
+                var age = ageAndWeightSplit[0];
+                var weight = ageAndWeightSplit[1];
+                var attire = ageAndWeight.SelectSingleNode(".//span")?.InnerText?.Trim() ?? "";
                 var trainerAndJockey = container.SelectNodes(".//span[contains(@class,'icon-text__t')]");
-                var jockey = trainerAndJockey[0].InnerHtml;
-                var trainer = trainerAndJockey[1].InnerHtml;
-                var distanceBetween = container.SelectSingleNode(".//div[contains(@class,'card-cell--form')]").InnerHtml;
+                var jockey = HTMLAgilityPackHelpers.GetTextOnlyFromDiv(trainerAndJockey[0]);
+                var trainer = HTMLAgilityPackHelpers.GetTextOnlyFromDiv(trainerAndJockey[1]);
+                var distanceBetween = HTMLAgilityPackHelpers.GetTextOnlyFromDiv(container.SelectSingleNode(".//div[contains(@class,'card-cell--form')]"));
                 var time = ""; // TODO, may even need to do a new scrape request
 
+                //DEBUG: 
+                if (!String.IsNullOrEmpty(distanceBetween)) 
+                {
+                    string decoded = WebUtility.HtmlDecode(distanceBetween);  // Result: "2¼"
+                    distanceBetween = StringHelper.ReplaceFractionsWithDecimals(decoded);
+                }
+
                 raceHorse.Position = position.Trim();
-                raceHorse.HorseName = horseName.Trim();
-                raceHorse.Odds = odds.Trim();
+                raceHorse.HorseName = StringHelper.FormatName(horseName.Trim());
+                raceHorse.Odds = StringHelper.FormatName(odds.Replace("J", "").ToLower()).Trim();
                 raceHorse.Age = age.Trim();
                 raceHorse.Weight = weight.Trim();
-                raceHorse.JockeyName = jockey.Trim();
-                raceHorse.TrainerName = trainer.Trim();
+                raceHorse.JockeyName = StringHelper.FormatName(jockey.Trim());
+                raceHorse.TrainerName = StringHelper.FormatName(trainer.Trim());
                 raceHorse.DistanceBetween = distanceBetween.Trim();
                 raceHorse.Time = time;
+                raceHorse.Attire = attire;
                 result.Add(raceHorse);
             }
 
@@ -308,6 +341,12 @@ namespace Shared.Managers
                 return result;
 
             if (html.Contains("RSA"))
+                return result;
+
+            if (html.Contains("Hong"))
+                return result;
+
+            if (html.Contains("Brazil"))
                 return result;
 
             result = html.Replace("Results", "").Trim();

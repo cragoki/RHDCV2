@@ -11,5 +11,7 @@
         public string? DistanceBetween { get; set; }
         public string? Time { get; set; }
         public string? Position { get; set; }
+        public string? Attire { get; set; }
+
     }
 }

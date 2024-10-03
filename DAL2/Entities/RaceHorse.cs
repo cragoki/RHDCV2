@@ -9,22 +9,27 @@ namespace DAL.Entities
     {
         public int Id { get; set; }
         public int RaceId { get; set; }
-        public Race RaceEntity { get; set; }
+        public virtual Race RaceEntity { get; set; }
         public int HorseId { get; set; }
-        public Horse HorseEntity { get; set; }
+        public virtual Horse HorseEntity { get; set; }
         [Precision(18, 4)]
         public decimal Weight { get; set; }
         public int Age { get; set; }
         public int JockeyId { get; set; }
-        public Jockey JockeyEntity { get; set; }
+        public virtual Jockey JockeyEntity { get; set; }
         public int TrainerId { get; set; }
-        public Trainer TrainerEntity { get; set; }
+        public virtual Trainer TrainerEntity { get; set; }
         [Precision(18, 2)]
         public decimal? Odds { get; set; }
         [MaxLength(100)]
-        public string? DistanceBetween { get; set; }
+        public string? DistanceBetweenCategoryId { get; set; }
+        public virtual DistanceBetweenCategory DistanceBetweenCategoryEntity { get; set; }
         [Precision(18, 2)]
         public decimal? Time { get; set; }
         public int? Position { get; set; }
+        [MaxLength(10)]
+        public string? AttireCategoryId { get; set; }
+        public virtual AttireCategory AttireCategoryEntity { get; set; }
+
     }
 }

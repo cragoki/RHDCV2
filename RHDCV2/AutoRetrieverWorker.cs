@@ -54,7 +54,7 @@ namespace AutoRetriever
                     {
                         Console.WriteLine("Auto Retriever Started, checking for race data");
                         var htmlDoc = await _webScrapingManager.Scrape(urlData.Url!);
-                        await _webScrapingManager.ScrapeAllData(htmlDoc, urlData.EventDate);
+                        var scrapedData = await _webScrapingManager.ScrapeAllData(htmlDoc, urlData.EventDate);
                         //Call the scraper method, this should check a different table, WorkerServiceLog, which defines the Worker Service Id, and the RaceDates it has
                         //Then generate a list of 'missing dates' from that.
                         //For example, if we had ran this 3 days ago, it should notice that we are missing data from today backwards,
@@ -67,11 +67,11 @@ namespace AutoRetriever
 
                         //Lastly, delete all resolved errors...
                         Console.WriteLine("Auto Retriever Complete");
-                        await _webScrapingManager.AddAutoretrieverLog(urlData.EventDate, true);
+                        await _webScrapingManager.AddAutoretrieverLog(urlData.EventDate, true, "Success");
                     }
-                    catch
+                    catch(Exception ex)
                     {
-                        await _webScrapingManager.AddAutoretrieverLog(urlData.EventDate, false);
+                        await _webScrapingManager.AddAutoretrieverLog(urlData.EventDate, false, ex.Message);
                         //worker.Start = false; TEMPORARY -> Enable when the Autoretriever is ready
                     }
 

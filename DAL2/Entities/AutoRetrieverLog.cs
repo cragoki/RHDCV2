@@ -1,5 +1,4 @@
 ﻿using DAL.Entities.Interfaces;
-using DAL.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace DAL.Entities
@@ -9,6 +8,8 @@ namespace DAL.Entities
         public int Id { get; set; }
         public DateTime DateRetrieved { get; set; }
         public bool Success { get; set; }
+        [MaxLength(250)]
+        public string Note { get; set; }
 
     }
 }

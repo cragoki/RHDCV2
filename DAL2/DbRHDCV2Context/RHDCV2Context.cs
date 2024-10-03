@@ -23,6 +23,8 @@ namespace DAL.DbRHDCV2Context
         public DbSet<Trainer> tb_trainer { get; set; }
         public DbSet<Alert> tb_alert { get; set; }
         public DbSet<RaceCourse> tb_race_course { get; set; }
+        public DbSet<DistanceBetweenCategory> tb_distance_between_category { get; set; }
+        public DbSet<AttireCategory> tb_attire_category { get; set; }
 
         public RHDCV2Context(DbContextOptions<RHDCV2Context> options) : base(options)
         {

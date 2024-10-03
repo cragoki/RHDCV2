@@ -4,6 +4,7 @@ using DAL.DbRHDCV2Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(RHDCV2Context))]
-    partial class RHDCV2ContextModelSnapshot : ModelSnapshot
+    [Migration("20241003130354_AddingMappingTablesForAttireAndDistanceBetween")]
+    partial class AddingMappingTablesForAttireAndDistanceBetween
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,11 +61,6 @@ namespace DAL.Migrations
 
                     b.Property<DateTime>("DateRetrieved")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Note")
-                        .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
 
                     b.Property<bool>("Success")
                         .HasColumnType("bit");

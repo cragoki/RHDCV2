@@ -89,3 +89,4 @@ C:\Users\DCLaptop3\Documents\Repos\RHDCV2\RHDCV2\obj\Debug\net8.0\AutoRetriever.
 C:\Users\DCLaptop3\Documents\Repos\RHDCV2\RHDCV2\obj\Debug\net8.0\AutoRetriever.genruntimeconfig.cache
 C:\Users\DCLaptop3\Documents\Repos\RHDCV2\RHDCV2\obj\Debug\net8.0\ref\AutoRetriever.dll
 C:\Users\DCLaptop3\Documents\Repos\RHDCV2\RHDCV2\bin\Debug\net8.0\HtmlAgilityPack.dll
+C:\Users\DCLaptop3\Documents\Repos\RHDCV2\RHDCV2\obj\Debug\net8.0\AutoRetriever.sourcelink.json
