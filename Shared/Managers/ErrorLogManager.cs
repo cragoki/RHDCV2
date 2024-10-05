@@ -30,7 +30,7 @@ namespace Shared.Managers
                     Resolved = false
                 };
 
-                _context.Add(error);
+                _context.tb_error_log.Add(error);
                 await _context.SaveChangesAsync();
             }
             catch (Exception ex)

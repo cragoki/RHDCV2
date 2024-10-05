@@ -11,6 +11,8 @@ namespace Shared.Configuration
             services.AddScoped<IErrorLogManager, ErrorLogManager>();
             services.AddScoped<IWebScrapingManager, WebScrapingManager>();
             services.AddScoped<IMappingTableManager, MappingTableManager>();
+            services.AddScoped<IDatabaseManager, DatabaseManager>();
+            services.AddScoped<IAlertManager, AlertManager>();
 
         }
     }

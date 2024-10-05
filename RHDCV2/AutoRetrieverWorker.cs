@@ -11,17 +11,14 @@ namespace AutoRetriever
         private readonly RHDCV2Context _context;
         private readonly IErrorLogManager _error;
         private readonly IWebScrapingManager _webScrapingManager;
+        private readonly IDatabaseManager _dataManager;
 
-        public AutoRetrieverWorker(RHDCV2Context context, IErrorLogManager error, IWebScrapingManager webScrapingManager) 
+        public AutoRetrieverWorker(RHDCV2Context context, IErrorLogManager error, IWebScrapingManager webScrapingManager, IDatabaseManager dataManager) 
         {
             _context = context;
             _error = error;
             _webScrapingManager = webScrapingManager;
-        }
-
-        private void OnStopping()
-        {
-            //
+            _dataManager = dataManager;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -49,20 +46,18 @@ namespace AutoRetriever
 
                 if (worker.Start)
                 {
+                    //Identify the last day we are missing race data for, and produce a scrape url for that day
                     var urlData = _webScrapingManager.GenerateNextResultRetrievalURL();
                     try
                     {
                         Console.WriteLine("Auto Retriever Started, checking for race data");
+
+                        //Get the Events for the chosen day's base page
                         var htmlDoc = await _webScrapingManager.Scrape(urlData.Url!);
+                        //Scrape Data
                         var scrapedData = await _webScrapingManager.ScrapeAllData(htmlDoc, urlData.EventDate);
-                        //Call the scraper method, this should check a different table, WorkerServiceLog, which defines the Worker Service Id, and the RaceDates it has
-                        //Then generate a list of 'missing dates' from that.
-                        //For example, if we had ran this 3 days ago, it should notice that we are missing data from today backwards,
-                        //Now scraping todays races could be a little different to scraping historic races, for that reason I would think the Fetch Automator may need
-                        //to call a different function if todays races are missing, and with that in mind, we may need a process to fetch results also if the results 
-                        //are missing, a simple 'iscomplete' flag on each race should do the trick.
-                        //Back to the original point, we ran this project 3 days ago, so we fetch races for today, yesterday and the day before, then it picks up
-                        //on the last date before that, and fetches those races too.
+                        //Adding Scraped Data to the database
+                        await _dataManager.AddEventAndRaceData(scrapedData);
 
 
                         //Lastly, delete all resolved errors...
@@ -72,7 +67,6 @@ namespace AutoRetriever
                     catch(Exception ex)
                     {
                         await _webScrapingManager.AddAutoretrieverLog(urlData.EventDate, false, ex.Message);
-                        //worker.Start = false; TEMPORARY -> Enable when the Autoretriever is ready
                     }
 
                     worker.LastRun = DateTime.Now;

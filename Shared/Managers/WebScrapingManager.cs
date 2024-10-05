@@ -15,11 +15,13 @@ namespace Shared.Managers
     {
         private readonly IConfiguration _configuration;
         private readonly RHDCV2Context _context;
+        private readonly IErrorLogManager _error;
 
-        public WebScrapingManager(IConfiguration configuration, RHDCV2Context context)
+        public WebScrapingManager(IConfiguration configuration, RHDCV2Context context, IErrorLogManager error)
         {
             _configuration = configuration;
             _context = context;
+            _error = error;
         }
 
         #region PUBLIC
@@ -53,25 +55,41 @@ namespace Shared.Managers
 
             return result;
         }
-        public async Task<HtmlDocument> Scrape(string url) 
+        public async Task<HtmlDocument> Scrape(string url)
         {
-            var page = await CallUrl(url);
-            HtmlDocument htmlDoc = new HtmlDocument();
-            htmlDoc.LoadHtml(page);
-            await Task.Delay(5000); // This'll slow things down but at least it doesnt look like I'm trying to DDOS anyone
-            return htmlDoc;
+            try
+            {
+                var page = await CallUrl(url);
+                HtmlDocument htmlDoc = new HtmlDocument();
+                htmlDoc.LoadHtml(page);
+                await Task.Delay(5000); // This'll slow things down but at least it doesnt look like I'm trying to DDOS anyone
+                return htmlDoc;
+            }
+            catch (Exception ex)
+            {
+                await _error.LogError("", "WebScrapingManager.cs", "Scrape", ErrorType.HttpRequest, ex.StackTrace!, ex.InnerException?.Message ?? "", ex.Message!);
+                throw new Exception(ex.Message);
+            }
         }
 
         public async Task AddAutoretrieverLog(DateTime date, bool success, string note)
         {
-            _context.tb_auto_retriever_log.Add(new DAL.Entities.AutoRetrieverLog()
+            try 
             {
-                DateRetrieved = date,
-                Success = success,
-                Note = note
-            });
+                _context.tb_auto_retriever_log.Add(new DAL.Entities.AutoRetrieverLog()
+                {
+                    DateRetrieved = date,
+                    Success = success,
+                    Note = note
+                });
 
-            await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                await _error.LogError("tb_auto_retriever_log", "WebScrapingManager.cs", "AddAutoretrieverLog", ErrorType.Database, ex.StackTrace!, ex.InnerException?.Message ?? "", ex.Message!);
+                throw new Exception(ex.Message);
+            }
         }
 
         public async Task<List<EventModel>> ScrapeAllData(HtmlDocument htmlDoc, DateTime raceDate) 
@@ -120,67 +138,75 @@ namespace Shared.Managers
         private async Task<List<RaceModel>> ScrapeRaceData(HtmlDocument htmlDoc, EventModel e)
         {
             var result = new List<RaceModel>();
-            //Using Regex to filter out brackets, and anything within the brackets
-            var courseNameForURL = Regex.Replace(e.CourseName, @"\s?\(.*?\)", "");
-            var raceContainer = htmlDoc.DocumentNode.SelectSingleNode("//div[contains(@id,'todays-results-" + courseNameForURL + "')]");
-            var raceData = raceContainer.SelectNodes(".//article");
 
-            foreach (var race in raceData) 
+            try 
             {
-                var toAdd = new RaceModel();
-                //Pick out the race Url and scrape the new page
-                var extension = race.SelectSingleNode(".//a[contains(@class,'post-text__t')]").Attributes["href"].Value;
-                var raceUrl = BaseUrlWithExtension(extension);
-                var raceHtml = await Scrape(raceUrl);
+                //Using Regex to filter out brackets, and anything within the brackets
+                var courseNameForURL = Regex.Replace(e.CourseName, @"\s?\(.*?\)", "");
+                var raceContainer = htmlDoc.DocumentNode.SelectSingleNode("//div[contains(@id,'todays-results-" + courseNameForURL.Replace(" ", "-") + "')]");
+                var raceData = raceContainer.SelectNodes(".//article");
 
-                //Now we have race data, we need to pick out the attributes
-                toAdd.RaceUrl = raceUrl;
-
-                //Race Type -> Check the race name for .Contains racetype. Unfortunately this is the only way we can do this...
-                var raceHeader = raceHtml.DocumentNode.SelectSingleNode("//div[contains(@class,'race-header__details--primary')]");
-                var raceNameDiv = raceHeader.SelectSingleNode(".//p[contains(@class,'p--medium')]");
-                var raceName = raceNameDiv.SelectSingleNode(".//b").InnerHtml.ToLower();
-                toAdd.RaceType = raceName.Contains("hurdle") ? RaceType.Hurdles : 
-                    raceName.Contains("chase") ? RaceType.Chase : 
-                    raceName.Contains("handicap") ? RaceType.Handicap : 
-                    RaceType.Flat;
-                var classAndAges = raceHeader.SelectSingleNode(".//p[not(@class)]").InnerHtml;
-                var classAndAgesSplit = classAndAges.Split("|");
-
-                var c = "";
-                var a = "";
-
-                //Irish Races don't have classes
-                if (classAndAgesSplit.Count() < 2)
+                foreach (var race in raceData)
                 {
-                    c = "0";
-                    a = classAndAgesSplit[0].Trim();
+                    var toAdd = new RaceModel();
+                    //Pick out the race Url and scrape the new page
+                    var extension = race.SelectSingleNode(".//a[contains(@class,'post-text__t')]").Attributes["href"].Value;
+                    var raceUrl = BaseUrlWithExtension(extension);
+                    var raceHtml = await Scrape(raceUrl);
+
+                    //Now we have race data, we need to pick out the attributes
+                    toAdd.RaceUrl = raceUrl;
+
+                    //Race Type -> Check the race name for .Contains racetype. Unfortunately this is the only way we can do this...
+                    var raceHeader = raceHtml.DocumentNode.SelectSingleNode("//div[contains(@class,'race-header__details--primary')]");
+                    var raceNameDiv = raceHeader.SelectSingleNode(".//p[contains(@class,'p--medium')]");
+                    var raceName = raceNameDiv.SelectSingleNode(".//b").InnerHtml.ToLower();
+                    toAdd.RaceType = raceName.Contains("hurdle") ? RaceType.Hurdles :
+                        raceName.Contains("chase") ? RaceType.Chase :
+                        raceName.Contains("handicap") ? RaceType.Handicap :
+                        RaceType.Flat;
+                    var classAndAges = raceHeader.SelectSingleNode(".//p[not(@class)]").InnerHtml;
+                    var classAndAgesSplit = classAndAges.Split("|");
+                    var c = "";
+                    var a = "";
+
+                    //Irish Races don't have classes
+                    if (classAndAgesSplit.Count() < 2)
+                    {
+                        c = "0";
+                        a = classAndAgesSplit[0].Trim();
+                    }
+                    //Cut out division
+                    else if (classAndAgesSplit.Count() > 2)
+                    {
+                        c = classAndAgesSplit[1].Trim().ToLower().Replace("class ", "");
+                        a = classAndAgesSplit[2].Trim();
+                    }
+                    else
+                    {
+                        c = classAndAgesSplit[0].Trim().ToLower().Replace("class ", "");
+                        a = classAndAgesSplit[1].Trim();
+                    }
+
+                    toAdd.Class = c;
+                    toAdd.AgeCategoryName = a;
+
+                    var raceDetailsDiv = raceHtml.DocumentNode.SelectSingleNode("//div[contains(@class,'race-header__details--secondary')]");
+                    var going = raceDetailsDiv.SelectSingleNode(".//p[contains(@class,'p--medium')]").InnerHtml.ToLower();
+                    var distance = raceDetailsDiv.SelectSingleNode(".//div[contains(@class,'p--large')]").InnerHtml.ToLower();
+
+                    toAdd.GoingCategoryName = going.Trim();
+                    toAdd.DistanceCategoryName = distance.Trim();
+
+                    result.Add(toAdd);
                 }
-                //Cut out division
-                else if (classAndAgesSplit.Count() > 2) 
-                {
-                    c = classAndAgesSplit[1].Trim().ToLower().Replace("class ", "");
-                    a = classAndAgesSplit[2].Trim();
-                }
-                else
-                {
-                    c = classAndAgesSplit[0].Trim().ToLower().Replace("class ", "");
-                    a = classAndAgesSplit[1].Trim();
-                }
-
-                toAdd.Class = c;
-                toAdd.AgeCategoryName = a;
-
-                //Get the Going
-                var raceDetailsDiv = raceHtml.DocumentNode.SelectSingleNode("//div[contains(@class,'race-header__details--secondary')]");
-                var going = raceDetailsDiv.SelectSingleNode(".//p[contains(@class,'p--medium')]").InnerHtml.ToLower();
-                var distance = raceDetailsDiv.SelectSingleNode(".//div[contains(@class,'p--large')]").InnerHtml.ToLower();
-
-                toAdd.GoingCategoryName = going.Trim();
-                toAdd.DistanceCategoryName = distance.Trim();
-
-                result.Add(toAdd);
             }
+            catch (Exception ex)
+            {
+                await _error.LogError("", "WebScrapingManager.cs", "ScrapeRaceData", ErrorType.WebScraping, ex.StackTrace!, ex.InnerException?.Message ?? "", ex.Message!);
+                throw new Exception(ex.Message);
+            }
+
 
             return result;
         }
@@ -189,51 +215,55 @@ namespace Shared.Managers
         {
             var result = new List<RaceHorseModel>();
 
-            if (String.IsNullOrEmpty(race.RaceUrl))
-                throw new Exception("Failed to scrape race. No URL Provided");
 
-            var racePage = await Scrape(race.RaceUrl!);
-            var raceContainer = racePage.DocumentNode.SelectSingleNode("//div[contains(@class,'card__content')]");
-            var raceHorseContainers = raceContainer.SelectNodes(".//div[contains(@class, 'card-entry') and not(contains(@class, 'card-entry--non-runner'))]");
-
-            foreach (var container in raceHorseContainers) 
+            try 
             {
-                var raceHorse = new RaceHorseModel();
-                var position = HTMLAgilityPackHelpers.GetTextOnlyFromDiv(container.SelectSingleNode(".//span[contains(@class,'p--large')]"));
-                var horseName = HTMLAgilityPackHelpers.GetTextOnlyFromDiv(container.SelectSingleNode(".//a[contains(@class,'horse__link')]"));
-                var odds = HTMLAgilityPackHelpers.GetTextOnlyFromDiv(container.SelectSingleNode(".//div[contains(@class,'card-cell--odds')]"));
-                var ageAndWeight = container.SelectSingleNode(".//div[contains(@class,'card-cell--stats')]");
-                var ageAndWeightSplit = ageAndWeight.InnerText.Trim().Split("\r\n");
-                var age = ageAndWeightSplit[0];
-                var weight = ageAndWeightSplit[1];
-                var attire = ageAndWeight.SelectSingleNode(".//span")?.InnerText?.Trim() ?? "";
-                var trainerAndJockey = container.SelectNodes(".//span[contains(@class,'icon-text__t')]");
-                var jockey = HTMLAgilityPackHelpers.GetTextOnlyFromDiv(trainerAndJockey[0]);
-                var trainer = HTMLAgilityPackHelpers.GetTextOnlyFromDiv(trainerAndJockey[1]);
-                var distanceBetween = HTMLAgilityPackHelpers.GetTextOnlyFromDiv(container.SelectSingleNode(".//div[contains(@class,'card-cell--form')]"));
-                var time = ""; // TODO, may even need to do a new scrape request
+                if (String.IsNullOrEmpty(race.RaceUrl))
+                    throw new Exception("Failed to scrape race. No URL Provided");
 
-                //DEBUG: 
-                if (!String.IsNullOrEmpty(distanceBetween)) 
+                var racePage = await Scrape(race.RaceUrl!);
+                var raceContainer = racePage.DocumentNode.SelectSingleNode("//div[contains(@class,'card__content')]");
+                var raceHorseContainers = raceContainer.SelectNodes(".//div[contains(@class, 'card-entry') and not(contains(@class, 'card-entry--non-runner'))]");
+
+                foreach (var container in raceHorseContainers)
                 {
-                    string decoded = WebUtility.HtmlDecode(distanceBetween);  // Result: "2¼"
-                    distanceBetween = StringHelper.ReplaceFractionsWithDecimals(decoded);
+                    var raceHorse = new RaceHorseModel();
+                    var position = HTMLAgilityPackHelpers.GetTextOnlyFromDiv(container.SelectSingleNode(".//span[contains(@class,'p--large')]"));
+                    var horseName = HTMLAgilityPackHelpers.GetTextOnlyFromDiv(container.SelectSingleNode(".//a[contains(@class,'horse__link')]"));
+                    var odds = HTMLAgilityPackHelpers.GetTextOnlyFromDiv(container.SelectSingleNode(".//div[contains(@class,'card-cell--odds')]"));
+                    var ageAndWeight = container.SelectSingleNode(".//div[contains(@class,'card-cell--stats')]");
+                    var ageAndWeightSplit = ageAndWeight.InnerText.Trim().Split("\r\n");
+                    var age = ageAndWeightSplit[0];
+                    var weight = ageAndWeightSplit[1];
+                    var attire = ageAndWeight.SelectSingleNode(".//span")?.InnerText?.Trim() ?? "";
+                    var trainerAndJockey = container.SelectNodes(".//span[contains(@class,'icon-text__t')]");
+                    var jockey = HTMLAgilityPackHelpers.GetTextOnlyFromDiv(trainerAndJockey[0]);
+                    var trainer = HTMLAgilityPackHelpers.GetTextOnlyFromDiv(trainerAndJockey[1]);
+                    var distanceBetween = HTMLAgilityPackHelpers.GetTextOnlyFromDiv(container.SelectSingleNode(".//div[contains(@class,'card-cell--form')]"));
+
+                    if (!String.IsNullOrEmpty(distanceBetween))
+                    {
+                        string decoded = WebUtility.HtmlDecode(distanceBetween);
+                        distanceBetween = StringHelper.ReplaceFractionsWithDecimals(decoded);
+                    }
+
+                    raceHorse.Position = position.Trim();
+                    raceHorse.HorseName = StringHelper.FormatName(horseName.Trim());
+                    raceHorse.Odds = StringHelper.FormatName(odds.Replace("J", "").ToLower()).Trim();
+                    raceHorse.Age = age.Trim();
+                    raceHorse.Weight = weight.Trim();
+                    raceHorse.JockeyName = StringHelper.FormatName(jockey.Trim());
+                    raceHorse.TrainerName = StringHelper.FormatName(trainer.Trim());
+                    raceHorse.DistanceBetween = distanceBetween.Trim();
+                    raceHorse.Attire = attire;
+                    result.Add(raceHorse);
                 }
-
-                raceHorse.Position = position.Trim();
-                raceHorse.HorseName = StringHelper.FormatName(horseName.Trim());
-                raceHorse.Odds = StringHelper.FormatName(odds.Replace("J", "").ToLower()).Trim();
-                raceHorse.Age = age.Trim();
-                raceHorse.Weight = weight.Trim();
-                raceHorse.JockeyName = StringHelper.FormatName(jockey.Trim());
-                raceHorse.TrainerName = StringHelper.FormatName(trainer.Trim());
-                raceHorse.DistanceBetween = distanceBetween.Trim();
-                raceHorse.Time = time;
-                raceHorse.Attire = attire;
-                result.Add(raceHorse);
             }
-
-
+            catch (Exception ex)
+            {
+                await _error.LogError("", "WebScrapingManager.cs", "ScrapeRaceHorseData", ErrorType.WebScraping, ex.StackTrace!, ex.InnerException?.Message ?? "", ex.Message!);
+                throw new Exception(ex.Message);
+            }
 
             return result;
         }
