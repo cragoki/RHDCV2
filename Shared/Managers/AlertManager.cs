@@ -2,6 +2,7 @@
 using DAL.Entities;
 using DAL.Enums;
 using Shared.Managers.Interfaces;
+using Shared.Models.ApiModels;
 
 namespace Shared.Managers
 {
@@ -12,6 +13,18 @@ namespace Shared.Managers
         public AlertManager(RHDCV2Context context)
         {
             _context = context;
+        }
+
+        public List<AlertModel> GetAlerts()
+        {
+            return _context.tb_alert.Where(x => !x.Resolved).Select(y => new AlertModel() 
+            {
+                Id = y.Id,
+                DateLogged = y.DateLogged,
+                Message = y.Message,
+                Resolved = y.Resolved,
+                Type = y.Type.ToString()
+            }).ToList();
         }
 
         public async Task CreateAlert(AlertType type, string message)

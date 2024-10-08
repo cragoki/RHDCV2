@@ -1,44 +1,29 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\DCLaptop3\\Documents\\Repos\\RHDCV2\\Shared\\Shared.csproj": {}
+    "C:\\Users\\Craig\\Documents\\GitHub\\RHDCV2\\Shared\\Shared.csproj": {}
   },
   "projects": {
-    "C:\\Users\\DCLaptop3\\Documents\\Repos\\RHDCV2\\DAL2\\DAL.csproj": {
+    "C:\\Users\\Craig\\Documents\\GitHub\\RHDCV2\\DAL2\\DAL.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\DCLaptop3\\Documents\\Repos\\RHDCV2\\DAL2\\DAL.csproj",
+        "projectUniqueName": "C:\\Users\\Craig\\Documents\\GitHub\\RHDCV2\\DAL2\\DAL.csproj",
         "projectName": "DAL",
-        "projectPath": "C:\\Users\\DCLaptop3\\Documents\\Repos\\RHDCV2\\DAL2\\DAL.csproj",
-        "packagesPath": "C:\\Users\\DCLaptop3\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\DCLaptop3\\Documents\\Repos\\RHDCV2\\DAL2\\obj\\",
+        "projectPath": "C:\\Users\\Craig\\Documents\\GitHub\\RHDCV2\\DAL2\\DAL.csproj",
+        "packagesPath": "C:\\Users\\Craig\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Craig\\Documents\\GitHub\\RHDCV2\\DAL2\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\DevExpress 21.1\\Components\\Offline Packages",
-          "C:\\Program Files (x86)\\DevExpress 21.2\\Components\\Offline Packages",
-          "C:\\Program Files\\DevExpress 23.2\\Components\\Offline Packages",
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\DCLaptop3\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 21.1.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 21.2.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 23.2.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\Craig\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\DevExpress 21.1\\Components\\System\\Components\\Packages": {},
-          "C:\\Program Files (x86)\\DevExpress 21.2\\Components\\System\\Components\\Packages": {},
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\DevExpress 23.2\\Components\\System\\Components\\Packages": {},
           "C:\\Program Files\\dotnet\\library-packs": {},
-          "https://api.nuget.org/v3/index.json": {},
-          "https://nuget.devexpress.com/95gNwvugC8b47WnIM8FaSlBpkRFL9TRnEdl38hr5OlAvJrcje1/api": {},
-          "https://www.votingdevelopment.co.uk/DclNugetServer/nuget": {}
+          "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
@@ -110,52 +95,37 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\DCLaptop3\\Documents\\Repos\\RHDCV2\\Shared\\Shared.csproj": {
+    "C:\\Users\\Craig\\Documents\\GitHub\\RHDCV2\\Shared\\Shared.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\DCLaptop3\\Documents\\Repos\\RHDCV2\\Shared\\Shared.csproj",
+        "projectUniqueName": "C:\\Users\\Craig\\Documents\\GitHub\\RHDCV2\\Shared\\Shared.csproj",
         "projectName": "Shared",
-        "projectPath": "C:\\Users\\DCLaptop3\\Documents\\Repos\\RHDCV2\\Shared\\Shared.csproj",
-        "packagesPath": "C:\\Users\\DCLaptop3\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\DCLaptop3\\Documents\\Repos\\RHDCV2\\Shared\\obj\\",
+        "projectPath": "C:\\Users\\Craig\\Documents\\GitHub\\RHDCV2\\Shared\\Shared.csproj",
+        "packagesPath": "C:\\Users\\Craig\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Craig\\Documents\\GitHub\\RHDCV2\\Shared\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\DevExpress 21.1\\Components\\Offline Packages",
-          "C:\\Program Files (x86)\\DevExpress 21.2\\Components\\Offline Packages",
-          "C:\\Program Files\\DevExpress 23.2\\Components\\Offline Packages",
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\DCLaptop3\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 21.1.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 21.2.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 23.2.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\Craig\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\DevExpress 21.1\\Components\\System\\Components\\Packages": {},
-          "C:\\Program Files (x86)\\DevExpress 21.2\\Components\\System\\Components\\Packages": {},
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\DevExpress 23.2\\Components\\System\\Components\\Packages": {},
           "C:\\Program Files\\dotnet\\library-packs": {},
-          "https://api.nuget.org/v3/index.json": {},
-          "https://nuget.devexpress.com/95gNwvugC8b47WnIM8FaSlBpkRFL9TRnEdl38hr5OlAvJrcje1/api": {},
-          "https://www.votingdevelopment.co.uk/DclNugetServer/nuget": {}
+          "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\DCLaptop3\\Documents\\Repos\\RHDCV2\\DAL2\\DAL.csproj": {
-                "projectPath": "C:\\Users\\DCLaptop3\\Documents\\Repos\\RHDCV2\\DAL2\\DAL.csproj"
+              "C:\\Users\\Craig\\Documents\\GitHub\\RHDCV2\\DAL2\\DAL.csproj": {
+                "projectPath": "C:\\Users\\Craig\\Documents\\GitHub\\RHDCV2\\DAL2\\DAL.csproj"
               }
             }
           }
@@ -196,7 +166,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
