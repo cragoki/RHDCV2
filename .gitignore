@@ -5,3 +5,9 @@
 /.vs
 **/bin/
 **/obj/
+/DAL2/bin
+/DAL2/obj
+/RHDCV2/bin
+/RHDCV2/obj
+/Shared/bin
+/Shared/obj
