@@ -14,10 +14,11 @@ namespace RHDCV2API.Controllers
             _alertManager = alertManager;
         }
 
-        [HttpGet(Name = "GetUnresolved")]
+        [HttpGet]
         public List<AlertModel> GetUnresolved()
         {
             return _alertManager.GetAlerts();
         }
     }
 }
+

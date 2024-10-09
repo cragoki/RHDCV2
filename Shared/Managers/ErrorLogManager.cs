@@ -2,6 +2,7 @@
 using DAL.DbRHDCV2Context;
 using DAL.Entities;
 using DAL.Enums;
+using Shared.Models.ApiModels;
 
 namespace Shared.Managers
 {
@@ -12,6 +13,22 @@ namespace Shared.Managers
         public ErrorLogManager(RHDCV2Context context)
         {
             _context = context;
+        }
+
+        public List<ErrorLogModel> GetErrors()
+        {
+            return _context.tb_error_log.Where(x => !x.Resolved).Select(y => new ErrorLogModel()
+            {
+                Id = y.Id,
+                ClassName = y.ClassName,
+                Stacktrace = y.Stacktrace,
+                ErrorType = y.ErrorType.ToString(),
+                InnerException = y.InnerException,
+                Message = y.Message,
+                MethodName = y.MethodName,
+                TableName = y.TableName,
+                Date = y.Date
+            }).ToList();
         }
 
         public async Task LogError(string tableName, string className, string methodName, ErrorType type, string stackTrace, string innerException, string message)
@@ -27,7 +44,8 @@ namespace Shared.Managers
                     Stacktrace = stackTrace,
                     InnerException = innerException,
                     Message = message,
-                    Resolved = false
+                    Resolved = false,
+                    Date = DateTime.UtcNow
                 };
 
                 _context.tb_error_log.Add(error);

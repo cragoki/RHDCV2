@@ -1,23 +1,18 @@
-﻿using DAL.Entities.Interfaces;
-using DAL.Enums;
+﻿using DAL.Enums;
 using System.ComponentModel.DataAnnotations;
 
-namespace DAL.Entities
+namespace Shared.Models.ApiModels
 {
-    public class ErrorLog : IEntity
+    public class ErrorLogModel
     {
         public int Id { get; set; }
-        [MaxLength(100)]
         public string? TableName { get; set; }
-        [MaxLength(100)]
         public string? ClassName { get; set; }
-        [MaxLength(100)]
         public string? MethodName { get; set; }
-        public ErrorType ErrorType { get; set; }
+        public string? ErrorType { get; set; }
         public string? Stacktrace { get; set; }
         public string? InnerException { get; set; }
         public string? Message { get; set; }
-        public bool Resolved { get; set; }
         public DateTime Date { get; set; }
 
     }

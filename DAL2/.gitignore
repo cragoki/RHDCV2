@@ -1,0 +1,15 @@
+################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+**/bin/
+**/obj/
+/DAL2/bin
+/DAL2/obj
+/RHDCV2/bin
+/RHDCV2/obj
+/Shared/bin
+/Shared/obj
+/DAL2/obj
+/Shared/obj

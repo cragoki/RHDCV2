@@ -13,6 +13,7 @@ namespace Shared.Configuration
             services.AddScoped<IMappingTableManager, MappingTableManager>();
             services.AddScoped<IDatabaseManager, DatabaseManager>();
             services.AddScoped<IAlertManager, AlertManager>();
+            services.AddScoped<IRaceCourseManager, RaceCourseManager>();
 
         }
     }
