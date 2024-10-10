@@ -15,9 +15,17 @@ namespace RHDCV2API.Controllers
         }
 
         [HttpGet]
+        [Route("GetUnresolved")]
         public List<ErrorLogModel> GetUnresolved()
         {
             return _errorManager.GetErrors();
+        }
+
+        [HttpPost]
+        [Route("[action]")]
+        public async Task Resolve(ErrorLogModel model)
+        {
+            await _errorManager.Resolve(model);
         }
     }
 }

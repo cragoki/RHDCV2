@@ -7,5 +7,6 @@ namespace Shared.Managers.Interfaces
     {
         Task LogError(string tableName, string className, string methodName, ErrorType type, string stackTrace, string innerException, string message);
         List<ErrorLogModel> GetErrors();
+        Task Resolve(ErrorLogModel model);
     }
 }

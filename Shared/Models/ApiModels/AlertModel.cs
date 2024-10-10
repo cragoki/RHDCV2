@@ -7,5 +7,6 @@
         public string? Message { get; set; }
         public DateTime DateLogged { get; set; }
         public bool Resolved { get; set; }
+        public string? Endpoint { get; set; }
     }
 }

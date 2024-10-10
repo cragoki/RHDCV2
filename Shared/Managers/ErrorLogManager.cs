@@ -57,5 +57,19 @@ namespace Shared.Managers
             }
         }
 
+        public async Task Resolve(ErrorLogModel model)
+        {
+            var error = _context.tb_error_log.FirstOrDefault(x => x.Id == model.Id);
+
+            if (error == null)
+            {
+                throw new Exception($"Could not identify error with id of {model.Id}");
+            }
+
+            error.Resolved = true;
+
+            await _context.SaveChangesAsync();
+        }
+
     }
 }

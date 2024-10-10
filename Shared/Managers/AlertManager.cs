@@ -23,7 +23,8 @@ namespace Shared.Managers
                 DateLogged = y.DateLogged,
                 Message = y.Message,
                 Resolved = y.Resolved,
-                Type = y.Type.ToString()
+                Type = y.Type.ToString(),
+                Endpoint = GetEndpointForAlertType(y.Type, y.Id)
             }).ToList();
         }
 
@@ -46,6 +47,31 @@ namespace Shared.Managers
             {
                 throw new Exception(ex.Message);
             }
+        }
+
+        private static string GetEndpointForAlertType(AlertType type, int id) 
+        {
+            switch (type)
+            {
+                case AlertType.NewCourse:
+                    return "";
+                default:
+                    return "";
+            }
+        }
+
+        public async Task Resolve(AlertModel model)
+        {
+            var alert = _context.tb_alert.FirstOrDefault(x => x.Id == model.Id);
+
+            if (alert == null)
+            {
+                throw new Exception($"Could not identify alert with id of {model.Id}");
+            }
+
+            alert.Resolved = true;
+
+            await _context.SaveChangesAsync();
         }
 
     }

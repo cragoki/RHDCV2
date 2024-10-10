@@ -7,5 +7,6 @@ namespace Shared.Managers.Interfaces
     {
         Task CreateAlert(AlertType type, string message);
         List<AlertModel> GetAlerts();
+        Task Resolve(AlertModel model);
     }
 }

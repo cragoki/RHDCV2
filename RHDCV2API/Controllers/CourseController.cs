@@ -15,9 +15,24 @@ namespace RHDCV2API.Controllers
         }
 
         [HttpGet]
+        [Route("GetCourses")]
         public List<RaceCourseModel> GetRaceCourses()
         {
             return _raceCourseManager.GetCourses();
+        }
+
+        [HttpGet]
+        [Route("[action]")]
+        public RaceCourseModel GetRaceCourse(int id)
+        {
+            return _raceCourseManager.GetCourse(id);
+        }
+
+        [HttpPost]
+        [Route("[action]")]
+        public async Task EditRaceCourse(RaceCourseModel model)
+        {
+            await _raceCourseManager.EditCourse(model);
         }
     }
 }
