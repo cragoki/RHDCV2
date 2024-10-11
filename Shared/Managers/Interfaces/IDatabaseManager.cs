@@ -4,6 +4,6 @@ namespace Shared.Managers.Interfaces
 {
     public interface IDatabaseManager
     {
-        Task AddEventAndRaceData(List<EventModel> events);
+        Task AddEventAndRaceData(List<ScrapingEventModel> events);
     }
 }

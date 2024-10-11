@@ -1,7 +1,6 @@
 ﻿using DAL.Entities.Interfaces;
 using DAL.Entities.MappingTables;
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
 
 namespace DAL.Entities
 {
@@ -22,12 +21,12 @@ namespace DAL.Entities
         [Precision(18, 2)]
         public decimal? Odds { get; set; }
         public int? DistanceBetweenCategoryId { get; set; }
-        public virtual DistanceBetweenCategory DistanceBetweenCategoryEntity { get; set; }
+        public virtual DistanceBetweenCategory? DistanceBetweenCategoryEntity { get; set; }
         [Precision(18, 2)]
         public decimal? Time { get; set; }
         public int? Position { get; set; }
         public int? AttireCategoryId { get; set; }
-        public virtual AttireCategory AttireCategoryEntity { get; set; }
+        public virtual AttireCategory? AttireCategoryEntity { get; set; }
 
     }
 }

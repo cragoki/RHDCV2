@@ -92,7 +92,7 @@ namespace Shared.Managers
             }
         }
 
-        public async Task<List<EventModel>> ScrapeAllData(HtmlDocument htmlDoc, DateTime raceDate) 
+        public async Task<List<ScrapingEventModel>> ScrapeAllData(HtmlDocument htmlDoc, DateTime raceDate) 
         {
             var eventData = ScrapeEventData(htmlDoc, raceDate);
             
@@ -112,13 +112,13 @@ namespace Shared.Managers
             return eventData;
         }
 
-        private List<EventModel> ScrapeEventData(HtmlDocument htmlDoc, DateTime raceDate)
+        private List<ScrapingEventModel> ScrapeEventData(HtmlDocument htmlDoc, DateTime raceDate)
         {
-            var result = new List<EventModel>();
+            var result = new List<ScrapingEventModel>();
             var courses = htmlDoc.DocumentNode.SelectNodes("//div[contains(@class,'panel push--x-small')]");
             foreach (var course in courses) 
             {
-                var e = new EventModel();
+                var e = new ScrapingEventModel();
                 e.EventDate = raceDate;
 
                 //Get course name and validate its a course we want to use
@@ -135,9 +135,9 @@ namespace Shared.Managers
             return result;
         }
 
-        private async Task<List<RaceModel>> ScrapeRaceData(HtmlDocument htmlDoc, EventModel e)
+        private async Task<List<ScrapingRaceModel>> ScrapeRaceData(HtmlDocument htmlDoc, ScrapingEventModel e)
         {
-            var result = new List<RaceModel>();
+            var result = new List<ScrapingRaceModel>();
 
             try 
             {
@@ -148,7 +148,7 @@ namespace Shared.Managers
 
                 foreach (var race in raceData)
                 {
-                    var toAdd = new RaceModel();
+                    var toAdd = new ScrapingRaceModel();
                     //Pick out the race Url and scrape the new page
                     var extension = race.SelectSingleNode(".//a[contains(@class,'post-text__t')]").Attributes["href"].Value;
                     var raceUrl = BaseUrlWithExtension(extension);
@@ -211,9 +211,9 @@ namespace Shared.Managers
             return result;
         }
 
-        private async Task<List<RaceHorseModel>> ScrapeRaceHorseData(RaceModel race)
+        private async Task<List<ScrapingRaceHorseModel>> ScrapeRaceHorseData(ScrapingRaceModel race)
         {
-            var result = new List<RaceHorseModel>();
+            var result = new List<ScrapingRaceHorseModel>();
 
 
             try 
@@ -227,7 +227,7 @@ namespace Shared.Managers
 
                 foreach (var container in raceHorseContainers)
                 {
-                    var raceHorse = new RaceHorseModel();
+                    var raceHorse = new ScrapingRaceHorseModel();
                     var position = HTMLAgilityPackHelpers.GetTextOnlyFromDiv(container.SelectSingleNode(".//span[contains(@class,'p--large')]"));
                     var horseName = HTMLAgilityPackHelpers.GetTextOnlyFromDiv(container.SelectSingleNode(".//a[contains(@class,'horse__link')]"));
                     var odds = HTMLAgilityPackHelpers.GetTextOnlyFromDiv(container.SelectSingleNode(".//div[contains(@class,'card-cell--odds')]"));

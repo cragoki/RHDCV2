@@ -24,7 +24,7 @@ namespace Shared.Managers
             _error = error;
         }
 
-        public async Task AddEventAndRaceData(List<EventModel> events)
+        public async Task AddEventAndRaceData(List<ScrapingEventModel> events)
         {
             var addedEvents = new List<DaysEvent>();
             try
@@ -64,7 +64,7 @@ namespace Shared.Managers
             }
         }
 
-        public async Task<int> AddRace(RaceModel race, EventModel e, DaysEvent eventEntity)
+        public async Task<int> AddRace(ScrapingRaceModel race, ScrapingEventModel e, DaysEvent eventEntity)
         {
             try
             {
@@ -96,7 +96,7 @@ namespace Shared.Managers
             }
         }
 
-        public async Task AddRaceHorse(RaceHorseModel raceHorse, int raceId) 
+        public async Task AddRaceHorse(ScrapingRaceHorseModel raceHorse, int raceId) 
         {
             try 
             {

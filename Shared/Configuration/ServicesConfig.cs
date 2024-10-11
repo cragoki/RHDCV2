@@ -14,7 +14,9 @@ namespace Shared.Configuration
             services.AddScoped<IDatabaseManager, DatabaseManager>();
             services.AddScoped<IAlertManager, AlertManager>();
             services.AddScoped<IRaceCourseManager, RaceCourseManager>();
-
+            services.AddScoped<IEventManager, EventManager>();
+            services.AddScoped<IRaceManager, RaceManager>();
+            services.AddScoped<IRaceHorseManager, RaceHorseManager>();
         }
     }
 }

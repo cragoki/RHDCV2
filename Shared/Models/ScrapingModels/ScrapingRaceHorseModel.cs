@@ -1,6 +1,6 @@
 ﻿namespace Shared.Models.ScrapingModels
 {
-    public class RaceHorseModel
+    public class ScrapingRaceHorseModel
     {
         public string? HorseName { get; set; }
         public string? Weight { get; set; }

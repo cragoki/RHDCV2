@@ -9,6 +9,6 @@ namespace Shared.Managers.Interfaces
         URLGenerationModel GenerateNextResultRetrievalURL();
         Task AddAutoretrieverLog(DateTime date, bool success, string note);
         Task<HtmlDocument> Scrape(string url);
-        Task<List<EventModel>> ScrapeAllData(HtmlDocument htmlDoc, DateTime raceDate);
+        Task<List<ScrapingEventModel>> ScrapeAllData(HtmlDocument htmlDoc, DateTime raceDate);
     }
 }
