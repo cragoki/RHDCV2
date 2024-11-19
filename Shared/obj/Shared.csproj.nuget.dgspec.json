@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Craig\\Documents\\GitHub\\RHDCV2\\Shared\\Shared.csproj": {}
+    "C:\\Users\\PC\\Documents\\GitHub\\RHDCV2\\Shared\\Shared.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Craig\\Documents\\GitHub\\RHDCV2\\DAL2\\DAL.csproj": {
+    "C:\\Users\\PC\\Documents\\GitHub\\RHDCV2\\DAL2\\DAL.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Craig\\Documents\\GitHub\\RHDCV2\\DAL2\\DAL.csproj",
+        "projectUniqueName": "C:\\Users\\PC\\Documents\\GitHub\\RHDCV2\\DAL2\\DAL.csproj",
         "projectName": "DAL",
-        "projectPath": "C:\\Users\\Craig\\Documents\\GitHub\\RHDCV2\\DAL2\\DAL.csproj",
-        "packagesPath": "C:\\Users\\Craig\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Craig\\Documents\\GitHub\\RHDCV2\\DAL2\\obj\\",
+        "projectPath": "C:\\Users\\PC\\Documents\\GitHub\\RHDCV2\\DAL2\\DAL.csproj",
+        "packagesPath": "C:\\Users\\PC\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\PC\\Documents\\GitHub\\RHDCV2\\DAL2\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Craig\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\PC\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -99,17 +103,21 @@
         }
       }
     },
-    "C:\\Users\\Craig\\Documents\\GitHub\\RHDCV2\\Shared\\Shared.csproj": {
+    "C:\\Users\\PC\\Documents\\GitHub\\RHDCV2\\Shared\\Shared.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Craig\\Documents\\GitHub\\RHDCV2\\Shared\\Shared.csproj",
+        "projectUniqueName": "C:\\Users\\PC\\Documents\\GitHub\\RHDCV2\\Shared\\Shared.csproj",
         "projectName": "Shared",
-        "projectPath": "C:\\Users\\Craig\\Documents\\GitHub\\RHDCV2\\Shared\\Shared.csproj",
-        "packagesPath": "C:\\Users\\Craig\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Craig\\Documents\\GitHub\\RHDCV2\\Shared\\obj\\",
+        "projectPath": "C:\\Users\\PC\\Documents\\GitHub\\RHDCV2\\Shared\\Shared.csproj",
+        "packagesPath": "C:\\Users\\PC\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\PC\\Documents\\GitHub\\RHDCV2\\Shared\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Craig\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\PC\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -124,8 +132,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\Craig\\Documents\\GitHub\\RHDCV2\\DAL2\\DAL.csproj": {
-                "projectPath": "C:\\Users\\Craig\\Documents\\GitHub\\RHDCV2\\DAL2\\DAL.csproj"
+              "C:\\Users\\PC\\Documents\\GitHub\\RHDCV2\\DAL2\\DAL.csproj": {
+                "projectPath": "C:\\Users\\PC\\Documents\\GitHub\\RHDCV2\\DAL2\\DAL.csproj"
               }
             }
           }

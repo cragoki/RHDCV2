@@ -1,4 +1,5 @@
 ﻿using DAL.DbRHDCV2Context;
+using DAL.Entities.MappingTables;
 using DAL.Enums;
 using HtmlAgilityPack;
 using Microsoft.Extensions.Configuration;
@@ -32,8 +33,7 @@ namespace Shared.Managers
             try
             {
                 //Get most recent date retrieved
-                var history = _context.tb_auto_retriever_log.Select(x => x.DateRetrieved).ToList();
-
+                var history = _context.tb_auto_retriever_log;
                 //If there are no existing runs, use yesterdays date
                 if (history == null || history.Count() == 0)
                 {
@@ -44,7 +44,15 @@ namespace Shared.Managers
                     return result;
                 }
 
-                var dateToUse = GetMissingDate(history);
+                var failedEvent = history.FirstOrDefault(x => !x.Success && x.Retries < 3);
+
+                if (failedEvent != null) 
+                {
+                    result.EventDate = failedEvent.DateRetrieved.Date;
+                    result.Url = BuildResultUrl(failedEvent.DateRetrieved.Date);
+                }
+
+                var dateToUse = GetMissingDate(history.Select(x => x.DateRetrieved).ToList());
                 result.EventDate = dateToUse;
                 result.Url = BuildResultUrl(dateToUse);
             }
@@ -72,7 +80,7 @@ namespace Shared.Managers
             }
         }
 
-        public async Task AddAutoretrieverLog(DateTime date, bool success, string note)
+        public async Task AddAutoretrieverLog(DateTime date, bool success, string note, int retries = 0)
         {
             try 
             {
@@ -80,7 +88,8 @@ namespace Shared.Managers
                 {
                     DateRetrieved = date,
                     Success = success,
-                    Note = note
+                    Note = note,
+                    Retries = retries
                 });
 
                 await _context.SaveChangesAsync();
@@ -104,6 +113,10 @@ namespace Shared.Managers
                 foreach (var race in raceData)
                 {
                     var raceHorseData = await ScrapeRaceHorseData(race);
+                    if (raceHorseData.Count() == 0) 
+                    {
+                        race.Abandoned = true;
+                    }
                     race.RaceHorses = raceHorseData;
                 }
             
@@ -143,7 +156,7 @@ namespace Shared.Managers
             {
                 //Using Regex to filter out brackets, and anything within the brackets
                 var courseNameForURL = Regex.Replace(e.CourseName, @"\s?\(.*?\)", "");
-                var raceContainer = htmlDoc.DocumentNode.SelectSingleNode("//div[contains(@id,'todays-results-" + courseNameForURL.Replace(" ", "-") + "')]");
+                var raceContainer = htmlDoc.DocumentNode.SelectSingleNode("//div[contains(@id,'todays-results-" + courseNameForURL.Replace(" ", "-").Replace("Bangor-On-Dee", "Bangor-on-Dee") + "')]"); // Ridiculous quick fix
                 var raceData = raceContainer.SelectNodes(".//article");
 
                 foreach (var race in raceData)
@@ -223,6 +236,10 @@ namespace Shared.Managers
 
                 var racePage = await Scrape(race.RaceUrl!);
                 var raceContainer = racePage.DocumentNode.SelectSingleNode("//div[contains(@class,'card__content')]");
+                if (raceContainer == null) 
+                {
+                    return result;
+                }
                 var raceHorseContainers = raceContainer.SelectNodes(".//div[contains(@class, 'card-entry') and not(contains(@class, 'card-entry--non-runner'))]");
 
                 foreach (var container in raceHorseContainers)
@@ -237,8 +254,14 @@ namespace Shared.Managers
                     var weight = ageAndWeightSplit[1];
                     var attire = ageAndWeight.SelectSingleNode(".//span")?.InnerText?.Trim() ?? "";
                     var trainerAndJockey = container.SelectNodes(".//span[contains(@class,'icon-text__t')]");
-                    var jockey = HTMLAgilityPackHelpers.GetTextOnlyFromDiv(trainerAndJockey[0]);
-                    var trainer = HTMLAgilityPackHelpers.GetTextOnlyFromDiv(trainerAndJockey[1]);
+                    var jockey = "";
+                    var trainer = "";
+                    if (trainerAndJockey.Count() >= 2) 
+                    {
+                         jockey = HTMLAgilityPackHelpers.GetTextOnlyFromDiv(trainerAndJockey[0]);
+                         trainer = HTMLAgilityPackHelpers.GetTextOnlyFromDiv(trainerAndJockey[1]);
+                    }
+
                     var distanceBetween = HTMLAgilityPackHelpers.GetTextOnlyFromDiv(container.SelectSingleNode(".//div[contains(@class,'card-cell--form')]"));
 
                     if (!String.IsNullOrEmpty(distanceBetween))
@@ -377,6 +400,21 @@ namespace Shared.Managers
                 return result;
 
             if (html.Contains("Brazil"))
+                return result;
+
+            if (html.Contains("Argentina"))
+                return result;
+
+            if (html.Contains("Germany"))
+                return result;
+
+            if (html.Contains("Czech"))
+                return result;
+
+            if (html.Contains("Chile"))
+                return result;
+
+            if (html.Contains("Japan"))
                 return result;
 
             result = html.Replace("Results", "").Trim();

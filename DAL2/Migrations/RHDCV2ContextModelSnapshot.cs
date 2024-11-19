@@ -48,6 +48,82 @@ namespace DAL.Migrations
                     b.ToTable("tb_alert");
                 });
 
+            modelBuilder.Entity("DAL.Entities.Algorithm", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("AlgorithmType")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Enabled")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Version")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("tb_algorithm");
+                });
+
+            modelBuilder.Entity("DAL.Entities.AlgorithmExecution", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("Accuracy")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("AlgorithmId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("NumberOfRaces")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AlgorithmId");
+
+                    b.ToTable("tb_algorithm_execution");
+                });
+
+            modelBuilder.Entity("DAL.Entities.AlgorithmVariable", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AlgorithmId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ClassLimit")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IncludeAllWeather")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AlgorithmId");
+
+                    b.ToTable("tb_algorithm_variable");
+                });
+
             modelBuilder.Entity("DAL.Entities.AutoRetrieverLog", b =>
                 {
                     b.Property<int>("Id")
@@ -63,6 +139,9 @@ namespace DAL.Migrations
                         .IsRequired()
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
+
+                    b.Property<int>("Retries")
+                        .HasColumnType("int");
 
                     b.Property<bool>("Success")
                         .HasColumnType("bit");
@@ -288,6 +367,9 @@ namespace DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<bool>("Abandoned")
+                        .HasColumnType("bit");
+
                     b.Property<int>("AgeCategoryId")
                         .HasColumnType("int");
 
@@ -443,6 +525,28 @@ namespace DAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("tb_worker_service");
+                });
+
+            modelBuilder.Entity("DAL.Entities.AlgorithmExecution", b =>
+                {
+                    b.HasOne("DAL.Entities.Algorithm", "AlgorithmEntity")
+                        .WithMany()
+                        .HasForeignKey("AlgorithmId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AlgorithmEntity");
+                });
+
+            modelBuilder.Entity("DAL.Entities.AlgorithmVariable", b =>
+                {
+                    b.HasOne("DAL.Entities.Algorithm", "AlgorithmEntity")
+                        .WithMany()
+                        .HasForeignKey("AlgorithmId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AlgorithmEntity");
                 });
 
             modelBuilder.Entity("DAL.Entities.DaysEvent", b =>

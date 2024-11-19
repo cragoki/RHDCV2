@@ -29,7 +29,7 @@
         public static decimal ConvertFractionalToDecimalOdds(string fractionalOdds)
         {
             if (string.IsNullOrWhiteSpace(fractionalOdds))
-                throw new ArgumentException("Input cannot be null or empty.", nameof(fractionalOdds));
+                return 0;
 
             if (fractionalOdds == "evens")
                 return 2;

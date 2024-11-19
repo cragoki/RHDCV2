@@ -82,7 +82,8 @@ namespace Shared.Managers
                     AgeCategoryId = ageCategoryId,
                     GoingCategoryId = goingCategoryId,
                     DistanceCategoryId = distanceCategoryId,
-                    RaceDate = e.EventDate
+                    RaceDate = e.EventDate,
+                    Abandoned = race.Abandoned
                 };
 
                 _context.tb_race.Add(raceEntity);

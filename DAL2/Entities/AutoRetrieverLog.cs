@@ -10,6 +10,7 @@ namespace DAL.Entities
         public bool Success { get; set; }
         [MaxLength(250)]
         public string Note { get; set; }
+        public int Retries { get; set; }
 
     }
 }

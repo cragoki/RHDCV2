@@ -11,6 +11,6 @@ namespace Shared.Models.ScrapingModels
         public string? DistanceCategoryName { get; set; }
         public List<ScrapingRaceHorseModel>? RaceHorses { get; set; }
         public string? RaceUrl { get; set; }
-
+        public bool Abandoned { get; set; }
     }
 }

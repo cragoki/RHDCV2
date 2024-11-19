@@ -19,5 +19,6 @@ namespace DAL.Entities
         public int DistanceCategoryId { get; set; }
         public DistanceCategory DistanceCategoryEntity { get; set; }
         public DateTime RaceDate { get; set; }
+        public bool Abandoned { get; set; }
     }
 }

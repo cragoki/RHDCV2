@@ -25,6 +25,9 @@ namespace DAL.DbRHDCV2Context
         public DbSet<RaceCourse> tb_race_course { get; set; }
         public DbSet<DistanceBetweenCategory> tb_distance_between_category { get; set; }
         public DbSet<AttireCategory> tb_attire_category { get; set; }
+        public DbSet<Algorithm> tb_algorithm { get; set; }
+        public DbSet<AlgorithmExecution> tb_algorithm_execution { get; set; }
+        public DbSet<AlgorithmVariable> tb_algorithm_variable { get; set; }
 
         public RHDCV2Context(DbContextOptions<RHDCV2Context> options) : base(options)
         {

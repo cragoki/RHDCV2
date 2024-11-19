@@ -16,9 +16,16 @@ namespace RHDCV2API.Controllers
 
         [HttpGet]
         [Route("GetEvents")]
-        public List<EventModel> GetEvents(DateTime date)
+        public List<EventModel> GetEvents(string date)
         {
-            return _eventManager.GetDaysEvents(date);
+
+            if (String.IsNullOrEmpty(date))
+            {
+                throw new Exception("Date was empty");
+            }
+            DateTime dateTime = DateTime.Parse(date);
+
+            return _eventManager.GetDaysEvents(dateTime);
         }
     }
 }

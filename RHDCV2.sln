@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DAL", "DAL2\DAL.csproj", "{
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "Shared\Shared.csproj", "{817D4AFC-24EE-45DD-B6F4-DAE2E7B4C793}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RHDCV2API", "RHDCV2API\RHDCV2API.csproj", "{34A670C5-97B9-47E6-8262-EC974A3A0577}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RHDCV2API", "RHDCV2API\RHDCV2API.csproj", "{34A670C5-97B9-47E6-8262-EC974A3A0577}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlgorithmAutomator", "AlgorithmAutomator\AlgorithmAutomator.csproj", "{DDEAC544-BEB7-44D8-BB89-78F62EFF0D52}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{34A670C5-97B9-47E6-8262-EC974A3A0577}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{34A670C5-97B9-47E6-8262-EC974A3A0577}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{34A670C5-97B9-47E6-8262-EC974A3A0577}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DDEAC544-BEB7-44D8-BB89-78F62EFF0D52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDEAC544-BEB7-44D8-BB89-78F62EFF0D52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDEAC544-BEB7-44D8-BB89-78F62EFF0D52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDEAC544-BEB7-44D8-BB89-78F62EFF0D52}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

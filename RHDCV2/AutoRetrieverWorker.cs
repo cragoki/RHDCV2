@@ -48,25 +48,53 @@ namespace AutoRetriever
                 {
                     //Identify the last day we are missing race data for, and produce a scrape url for that day
                     var urlData = _webScrapingManager.GenerateNextResultRetrievalURL();
+                    var existingRetrieverLog = _context.tb_auto_retriever_log.FirstOrDefault(x => x.DateRetrieved.Date == urlData.EventDate.Date);
+
                     try
                     {
-                        Console.WriteLine("Auto Retriever Started, checking for race data");
+
+                        Console.WriteLine($"Auto Retriever Started, Scraping races for date {urlData.EventDate.ToString("dd-MM-yyy")}");
 
                         //Get the Events for the chosen day's base page
                         var htmlDoc = await _webScrapingManager.Scrape(urlData.Url!);
+
                         //Scrape Data
                         var scrapedData = await _webScrapingManager.ScrapeAllData(htmlDoc, urlData.EventDate);
+
+                        Console.WriteLine($"Scraping successful, adding data to db...");
+
                         //Adding Scraped Data to the database
                         await _dataManager.AddEventAndRaceData(scrapedData);
+
+                        Console.WriteLine($"Events Added.");
 
 
                         //Lastly, delete all resolved errors...
                         Console.WriteLine("Auto Retriever Complete");
-                        await _webScrapingManager.AddAutoretrieverLog(urlData.EventDate, true, "Success");
+
+                        if (existingRetrieverLog == null)
+                        {
+                            await _webScrapingManager.AddAutoretrieverLog(urlData.EventDate, true, "Success");
+                        }
+                        else 
+                        {
+                            existingRetrieverLog.Success = true;
+                        }
                     }
                     catch(Exception ex)
                     {
-                        await _webScrapingManager.AddAutoretrieverLog(urlData.EventDate, false, ex.Message);
+                        if (existingRetrieverLog == null)
+                        {
+                            await _webScrapingManager.AddAutoretrieverLog(urlData.EventDate, false, ex.Message);
+                        }
+                        else 
+                        {
+                            existingRetrieverLog.Success = false;
+                            existingRetrieverLog.Retries = existingRetrieverLog.Retries + 1;
+                        }
+
+                        Console.WriteLine("Auto Retriever Failed...");
+
                     }
 
                     worker.LastRun = DateTime.Now;
