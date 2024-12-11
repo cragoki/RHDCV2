@@ -182,3 +182,5 @@ C:\Users\PC\Documents\GitHub\RHDCV2\RHDCV2\obj\Debug\net8.0\refint\AutoRetriever
 C:\Users\PC\Documents\GitHub\RHDCV2\RHDCV2\obj\Debug\net8.0\AutoRetriever.pdb
 C:\Users\PC\Documents\GitHub\RHDCV2\RHDCV2\obj\Debug\net8.0\AutoRetriever.genruntimeconfig.cache
 C:\Users\PC\Documents\GitHub\RHDCV2\RHDCV2\obj\Debug\net8.0\ref\AutoRetriever.dll
+C:\Users\PC\Documents\GitHub\RHDCV2\RHDCV2\bin\Debug\net8.0\Castle.Core.dll
+C:\Users\PC\Documents\GitHub\RHDCV2\RHDCV2\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Proxies.dll

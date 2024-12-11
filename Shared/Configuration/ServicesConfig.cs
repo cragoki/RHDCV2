@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Shared.Algorithms;
+using Shared.Algorithms.Interfaces;
 using Shared.Managers;
 using Shared.Managers.Interfaces;
 
@@ -8,15 +10,21 @@ namespace Shared.Configuration
     {
         public static void Register(IServiceCollection services)
         {
-            services.AddSingleton<IErrorLogManager, ErrorLogManager>();
-            services.AddSingleton<IWebScrapingManager, WebScrapingManager>();
-            services.AddSingleton<IMappingTableManager, MappingTableManager>();
-            services.AddSingleton<IDatabaseManager, DatabaseManager>();
-            services.AddSingleton<IAlertManager, AlertManager>();
-            services.AddSingleton<IRaceCourseManager, RaceCourseManager>();
-            services.AddSingleton<IEventManager, EventManager>();
-            services.AddSingleton<IRaceManager, RaceManager>();
-            services.AddSingleton<IRaceHorseManager, RaceHorseManager>();
+            services.AddScoped<IErrorLogManager, ErrorLogManager>();
+            services.AddScoped<IWebScrapingManager, WebScrapingManager>();
+            services.AddScoped<IMappingTableManager, MappingTableManager>();
+            services.AddScoped<IDatabaseManager, DatabaseManager>();
+            services.AddScoped<IAlertManager, AlertManager>();
+            services.AddScoped<IRaceCourseManager, RaceCourseManager>();
+            services.AddScoped<IEventManager, EventManager>();
+            services.AddScoped<IRaceManager, RaceManager>();
+            services.AddScoped<IRaceHorseManager, RaceHorseManager>();
+            services.AddScoped<IAlgorithmManager, AlgorithmManager>();
+
+            //Algorithms
+            services.AddScoped<IAlphabeticalAlgorithm, AlphabeticalAlgorithm>();
+
+
         }
     }
 }

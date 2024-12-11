@@ -81,9 +81,6 @@ namespace DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<decimal>("Accuracy")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<int>("AlgorithmId")
                         .HasColumnType("int");
 
@@ -92,6 +89,12 @@ namespace DAL.Migrations
 
                     b.Property<int>("NumberOfRaces")
                         .HasColumnType("int");
+
+                    b.Property<decimal>("PlaceAccuracy")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("WinAccuracy")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -108,13 +111,31 @@ namespace DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<bool>("AgeOfHorseEnabled")
+                        .HasColumnType("bit");
+
                     b.Property<int>("AlgorithmId")
                         .HasColumnType("int");
 
                     b.Property<int>("ClassLimit")
                         .HasColumnType("int");
 
+                    b.Property<bool>("CurrentConditionEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("CurrentConditionPoints")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IncludeAllWeather")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("PerformanceInLastXRacesEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("PerformanceInLastXRacesTake")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("TimeSinceLastRaceEnabled")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
@@ -418,7 +439,7 @@ namespace DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("Grade")
+                    b.Property<int?>("CourseType")
                         .HasColumnType("int");
 
                     b.Property<bool?>("IsAllWeather")

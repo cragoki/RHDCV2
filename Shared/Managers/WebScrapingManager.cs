@@ -373,7 +373,7 @@ namespace Shared.Managers
         }
 
         /// <summary>
-        /// Validate which courses we want to use, for now, stick to UK and Ireland
+        /// Validate which courses we want to use, for now, stick to UK and Ireland < - Change to table in DB
         /// </summary>
         /// <param name="html"> Inner HTML Of the Event Title Divs h2 element</param>
         /// <returns></returns>
@@ -415,6 +415,18 @@ namespace Shared.Managers
                 return result;
 
             if (html.Contains("Japan"))
+                return result;
+
+            if (html.Contains("IRE PTP"))
+                return result;
+
+            if (html.Contains("Dubai"))
+                return result;
+
+            if (html.Contains("Australia"))
+                return result;
+
+            if (html.Contains("Bahrain"))
                 return result;
 
             result = html.Replace("Results", "").Trim();

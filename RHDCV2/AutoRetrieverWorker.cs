@@ -53,6 +53,11 @@ namespace AutoRetriever
                     try
                     {
 
+                        if (urlData.EventDate.Date < DateTime.Now.AddYears(-1)) 
+                        {
+                            Console.WriteLine("Auto Retriever is up to date");
+                            return;
+                        }
                         Console.WriteLine($"Auto Retriever Started, Scraping races for date {urlData.EventDate.ToString("dd-MM-yyy")}");
 
                         //Get the Events for the chosen day's base page

@@ -21,12 +21,13 @@ namespace Shared.Managers
             {
                 Id = y.Id,
                 SpeedType = y.SpeedType.ToString(),
-                Grade = y.Grade,
+                CourseType = y.CourseType.ToString(),
                 IsAllWeather = y.IsAllWeather,
                 Name = y.Name,
                 SurfaceType = y.SurfaceType.ToString(),
                 SpeedTypes = Enum.GetNames(typeof(SpeedType)).ToList(),
-                SurfaceTypes = Enum.GetNames(typeof(SurfaceType)).ToList()
+                SurfaceTypes = Enum.GetNames(typeof(SurfaceType)).ToList(),
+                CourseTypes = Enum.GetNames(typeof(CourseType)).ToList()
             }).ToList();
         }
 
@@ -43,12 +44,13 @@ namespace Shared.Managers
             {
                 Id = course.Id,
                 SpeedType = course.SpeedType.ToString(),
-                Grade = course.Grade,
+                CourseType = course.CourseType.ToString(),
                 IsAllWeather = course.IsAllWeather,
                 Name = course.Name,
                 SurfaceType = course.SurfaceType.ToString(),
                 SpeedTypes = Enum.GetNames(typeof(SpeedType)).ToList(),
-                SurfaceTypes = Enum.GetNames(typeof(SurfaceType)).ToList()
+                SurfaceTypes = Enum.GetNames(typeof(SurfaceType)).ToList(),
+                CourseTypes = Enum.GetNames(typeof(CourseType)).ToList()
             };
         }
 
@@ -62,7 +64,7 @@ namespace Shared.Managers
             }
 
             course.SurfaceType = EnumHelper.ParseEnum<SurfaceType>(model.SurfaceType);
-            course.Grade = model.Grade;
+            course.CourseType = EnumHelper.ParseEnum<CourseType>(model.CourseType);
             course.IsAllWeather = model.IsAllWeather;
             course.SpeedType = EnumHelper.ParseEnum<SpeedType>(model.SpeedType);
 

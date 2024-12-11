@@ -10,7 +10,7 @@ namespace DAL.Entities
         [MaxLength(100)]
         public string Name { get; set; }
         public SurfaceType? SurfaceType { get; set; }
-        public int? Grade { get; set; }
+        public CourseType? CourseType { get; set; }
         public SpeedType? SpeedType { get; set; }
         public bool? IsAllWeather { get; set; }
 

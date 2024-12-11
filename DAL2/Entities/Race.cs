@@ -8,16 +8,16 @@ namespace DAL.Entities
     {
         public int Id { get; set; }
         public int EventId { get; set; }
-        public DaysEvent EventEntity { get; set; }
+        public virtual DaysEvent EventEntity { get; set; }
         public int Class { get; set; }
         public string? RaceUrl { get; set; }
         public RaceType RaceType { get; set; }
         public int AgeCategoryId { get; set; }
-        public AgeCategory AgeCategoryEntity { get; set; }
+        public virtual AgeCategory AgeCategoryEntity { get; set; }
         public int GoingCategoryId { get; set; }
-        public GoingCategory GoingCategoryEntity { get; set; }
+        public virtual GoingCategory GoingCategoryEntity { get; set; }
         public int DistanceCategoryId { get; set; }
-        public DistanceCategory DistanceCategoryEntity { get; set; }
+        public virtual DistanceCategory DistanceCategoryEntity { get; set; }
         public DateTime RaceDate { get; set; }
         public bool Abandoned { get; set; }
     }

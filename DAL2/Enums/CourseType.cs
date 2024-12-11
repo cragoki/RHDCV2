@@ -4,9 +4,11 @@ namespace DAL.Enums
 {
     public enum CourseType
     {
-        [Display(Name = "Generic")]
-        Generic = 0,
-        [Display(Name ="All Weather")]
-        AllWeather = 1
+        [Display(Name = "Hurdle")]
+        Hurdle = 0,
+        [Display(Name = "Flat")]
+        Flat = 1,
+        [Display(Name = "Dual Purpose")]
+        Both = 1
     }
 }

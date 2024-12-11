@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(RHDCV2Context))]
-    [Migration("20241029113127_AlphabeticalAlgorithmScripts")]
-    partial class AlphabeticalAlgorithmScripts
+    [Migration("20241126183835_AddingWinAndPlaceAccuracies")]
+    partial class AddingWinAndPlaceAccuracies
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -84,9 +84,6 @@ namespace DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<decimal>("Accuracy")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<int>("AlgorithmId")
                         .HasColumnType("int");
 
@@ -95,6 +92,12 @@ namespace DAL.Migrations
 
                     b.Property<int>("NumberOfRaces")
                         .HasColumnType("int");
+
+                    b.Property<decimal>("PlaceAccuracy")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("WinAccuracy")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
