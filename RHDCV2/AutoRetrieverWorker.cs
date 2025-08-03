@@ -53,7 +53,7 @@ namespace AutoRetriever
                     try
                     {
 
-                        if (urlData.EventDate.Date < DateTime.Now.AddYears(-1)) 
+                        if (urlData.EventDate.Date < DateTime.Now.AddYears(-3)) 
                         {
                             Console.WriteLine("Auto Retriever is up to date");
                             return;
@@ -83,6 +83,7 @@ namespace AutoRetriever
                         }
                         else 
                         {
+                            existingRetrieverLog.Note = "Success";
                             existingRetrieverLog.Success = true;
                         }
                     }

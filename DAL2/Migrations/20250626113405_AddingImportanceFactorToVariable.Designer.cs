@@ -4,6 +4,7 @@ using DAL.DbRHDCV2Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(RHDCV2Context))]
-    partial class RHDCV2ContextModelSnapshot : ModelSnapshot
+    [Migration("20250626113405_AddingImportanceFactorToVariable")]
+    partial class AddingImportanceFactorToVariable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,7 +51,7 @@ namespace DAL.Migrations
                     b.ToTable("tb_alert");
                 });
 
-            modelBuilder.Entity("DAL.Entities.AlgorithmAccuracy", b =>
+            modelBuilder.Entity("DAL.Entities.Algorithm", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -56,121 +59,24 @@ namespace DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<decimal>("Accuracy")
-                        .HasPrecision(18, 4)
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<int>("AlgorithmId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AlgorithmId");
-
-                    b.ToTable("tb_algorithm_accuracy");
-                });
-
-            modelBuilder.Entity("DAL.Entities.AlgorithmConfiguration", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AlgorithmId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Importance")
-                        .HasPrecision(18, 4)
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<int>("VariableId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AlgorithmId");
-
-                    b.HasIndex("VariableId");
-
-                    b.ToTable("tb_algorithm_configuration");
-                });
-
-            modelBuilder.Entity("DAL.Entities.AlgorithmEventAccuracy", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<decimal>("Accuracy")
-                        .HasPrecision(18, 4)
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<int>("AlgorithmId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("EventEntityId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("EventId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("NumberOfCorrectPicks")
-                        .HasColumnType("int");
-
-                    b.Property<int>("NumberOfPicks")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AlgorithmId");
-
-                    b.HasIndex("EventEntityId");
-
-                    b.ToTable("tb_algorithm_event_accuracy");
-                });
-
-            modelBuilder.Entity("DAL.Entities.AlgorithmRaceHorseTotalScore", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AlgorithmId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsCorrect")
+                    b.Property<bool>("Active")
                         .HasColumnType("bit");
 
-                    b.Property<int>("MaxPlace")
+                    b.Property<int>("AlgorithmType")
                         .HasColumnType("int");
 
-                    b.Property<int>("RaceHorseId")
+                    b.Property<bool>("Enabled")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Version")
                         .HasColumnType("int");
-
-                    b.Property<decimal>("RequiredOdds")
-                        .HasPrecision(18, 4)
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<decimal>("TotalScore")
-                        .HasPrecision(18, 4)
-                        .HasColumnType("decimal(18,4)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AlgorithmId");
-
-                    b.HasIndex("RaceHorseId");
-
-                    b.ToTable("tb_algorithm_race_horse_total_score");
+                    b.ToTable("tb_algorithm");
                 });
 
-            modelBuilder.Entity("DAL.Entities.AlgorithmRacePrediction", b =>
+            modelBuilder.Entity("DAL.Entities.AlgorithmExecution", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -181,37 +87,28 @@ namespace DAL.Migrations
                     b.Property<int>("AlgorithmId")
                         .HasColumnType("int");
 
-                    b.Property<int>("EventEntityId")
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("NumberOfRaces")
                         .HasColumnType("int");
 
-                    b.Property<int>("EventId")
-                        .HasColumnType("int");
+                    b.Property<decimal>("PlaceAccuracy")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("PickOneId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PickTwoId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RaceId")
-                        .HasColumnType("int");
+                    b.Property<decimal>("WinAccuracy")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AlgorithmId");
 
-                    b.HasIndex("EventEntityId");
-
-                    b.HasIndex("PickOneId");
-
-                    b.HasIndex("PickTwoId");
-
-                    b.HasIndex("RaceId");
-
-                    b.ToTable("tb_algorithm_race_prediction");
+                    b.ToTable("tb_algorithm_execution");
                 });
 
-            modelBuilder.Entity("DAL.Entities.AlgorithmRaceVariableScore", b =>
+            modelBuilder.Entity("DAL.Entities.AlgorithmVariable", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -219,64 +116,38 @@ namespace DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<bool>("AgeOfHorseEnabled")
+                        .HasColumnType("bit");
+
                     b.Property<int>("AlgorithmId")
                         .HasColumnType("int");
 
-                    b.Property<int>("RaceHorseId")
+                    b.Property<int>("ClassLimit")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("Score")
-                        .HasPrecision(18, 4)
-                        .HasColumnType("decimal(18,4)");
+                    b.Property<bool>("CurrentConditionEnabled")
+                        .HasColumnType("bit");
 
-                    b.Property<int>("VariableId")
+                    b.Property<int?>("CurrentConditionPoints")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IncludeAllWeather")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("PerformanceInLastXRacesEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("PerformanceInLastXRacesTake")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("TimeSinceLastRaceEnabled")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AlgorithmId");
 
-                    b.HasIndex("RaceHorseId");
-
-                    b.HasIndex("VariableId");
-
-                    b.ToTable("tb_algorithm_race_variable_score");
-                });
-
-            modelBuilder.Entity("DAL.Entities.AlgorithmResult", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<decimal>("AdjustedScore")
-                        .HasPrecision(18, 4)
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<int>("AlgorithmId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RaceHorseId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Score")
-                        .HasPrecision(18, 4)
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<int>("VariableId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AlgorithmId");
-
-                    b.HasIndex("RaceHorseId");
-
-                    b.HasIndex("VariableId");
-
-                    b.ToTable("tb_algorithm_result");
+                    b.ToTable("tb_algorithm_variable");
                 });
 
             modelBuilder.Entity("DAL.Entities.AutoRetrieverLog", b =>
@@ -413,27 +284,6 @@ namespace DAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("tb_age_category");
-                });
-
-            modelBuilder.Entity("DAL.Entities.MappingTables.Algorithm", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<int>("Version")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("tb_algorithm");
                 });
 
             modelBuilder.Entity("DAL.Entities.MappingTables.AttireCategory", b =>
@@ -751,9 +601,9 @@ namespace DAL.Migrations
                     b.ToTable("tb_worker_service");
                 });
 
-            modelBuilder.Entity("DAL.Entities.AlgorithmAccuracy", b =>
+            modelBuilder.Entity("DAL.Entities.AlgorithmExecution", b =>
                 {
-                    b.HasOne("DAL.Entities.MappingTables.Algorithm", "AlgorithmEntity")
+                    b.HasOne("DAL.Entities.Algorithm", "AlgorithmEntity")
                         .WithMany()
                         .HasForeignKey("AlgorithmId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -762,158 +612,15 @@ namespace DAL.Migrations
                     b.Navigation("AlgorithmEntity");
                 });
 
-            modelBuilder.Entity("DAL.Entities.AlgorithmConfiguration", b =>
+            modelBuilder.Entity("DAL.Entities.AlgorithmVariable", b =>
                 {
-                    b.HasOne("DAL.Entities.MappingTables.Algorithm", "AlgorithmEntity")
+                    b.HasOne("DAL.Entities.Algorithm", "AlgorithmEntity")
                         .WithMany()
                         .HasForeignKey("AlgorithmId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DAL.Entities.Variable", "VariableEntity")
-                        .WithMany()
-                        .HasForeignKey("VariableId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("AlgorithmEntity");
-
-                    b.Navigation("VariableEntity");
-                });
-
-            modelBuilder.Entity("DAL.Entities.AlgorithmEventAccuracy", b =>
-                {
-                    b.HasOne("DAL.Entities.MappingTables.Algorithm", "AlgorithmEntity")
-                        .WithMany()
-                        .HasForeignKey("AlgorithmId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DAL.Entities.DaysEvent", "EventEntity")
-                        .WithMany()
-                        .HasForeignKey("EventEntityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AlgorithmEntity");
-
-                    b.Navigation("EventEntity");
-                });
-
-            modelBuilder.Entity("DAL.Entities.AlgorithmRaceHorseTotalScore", b =>
-                {
-                    b.HasOne("DAL.Entities.MappingTables.Algorithm", "AlgorithmEntity")
-                        .WithMany()
-                        .HasForeignKey("AlgorithmId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DAL.Entities.RaceHorse", "RaceHorseEntity")
-                        .WithMany()
-                        .HasForeignKey("RaceHorseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AlgorithmEntity");
-
-                    b.Navigation("RaceHorseEntity");
-                });
-
-            modelBuilder.Entity("DAL.Entities.AlgorithmRacePrediction", b =>
-                {
-                    b.HasOne("DAL.Entities.MappingTables.Algorithm", "AlgorithmEntity")
-                        .WithMany()
-                        .HasForeignKey("AlgorithmId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DAL.Entities.DaysEvent", "EventEntity")
-                        .WithMany()
-                        .HasForeignKey("EventEntityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DAL.Entities.AlgorithmRaceHorseTotalScore", "PickOneEntity")
-                        .WithMany()
-                        .HasForeignKey("PickOneId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("DAL.Entities.AlgorithmRaceHorseTotalScore", "PickTwoEntity")
-                        .WithMany()
-                        .HasForeignKey("PickTwoId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("DAL.Entities.Race", "RaceEntity")
-                        .WithMany()
-                        .HasForeignKey("RaceId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("AlgorithmEntity");
-
-                    b.Navigation("EventEntity");
-
-                    b.Navigation("PickOneEntity");
-
-                    b.Navigation("PickTwoEntity");
-
-                    b.Navigation("RaceEntity");
-                });
-
-            modelBuilder.Entity("DAL.Entities.AlgorithmRaceVariableScore", b =>
-                {
-                    b.HasOne("DAL.Entities.MappingTables.Algorithm", "AlgorithmEntity")
-                        .WithMany()
-                        .HasForeignKey("AlgorithmId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DAL.Entities.RaceHorse", "RaceHorseEntity")
-                        .WithMany()
-                        .HasForeignKey("RaceHorseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DAL.Entities.Variable", "VariableEntity")
-                        .WithMany()
-                        .HasForeignKey("VariableId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AlgorithmEntity");
-
-                    b.Navigation("RaceHorseEntity");
-
-                    b.Navigation("VariableEntity");
-                });
-
-            modelBuilder.Entity("DAL.Entities.AlgorithmResult", b =>
-                {
-                    b.HasOne("DAL.Entities.MappingTables.Algorithm", "AlgorithmEntity")
-                        .WithMany()
-                        .HasForeignKey("AlgorithmId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DAL.Entities.RaceHorse", "RaceHorseEntity")
-                        .WithMany()
-                        .HasForeignKey("RaceHorseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DAL.Entities.Variable", "VariableEntity")
-                        .WithMany()
-                        .HasForeignKey("VariableId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AlgorithmEntity");
-
-                    b.Navigation("RaceHorseEntity");
-
-                    b.Navigation("VariableEntity");
                 });
 
             modelBuilder.Entity("DAL.Entities.DaysEvent", b =>

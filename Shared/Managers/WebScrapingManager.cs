@@ -44,12 +44,13 @@ namespace Shared.Managers
                     return result;
                 }
 
-                var failedEvent = history.FirstOrDefault(x => !x.Success && x.Retries < 3);
+                var failedEvent = history.OrderByDescending(x => x.DateRetrieved).FirstOrDefault(x => !x.Success && x.Retries < 3);
 
                 if (failedEvent != null) 
                 {
                     result.EventDate = failedEvent.DateRetrieved.Date;
                     result.Url = BuildResultUrl(failedEvent.DateRetrieved.Date);
+                    return result;
                 }
 
                 var dateToUse = GetMissingDate(history.Select(x => x.DateRetrieved).ToList());
@@ -252,7 +253,7 @@ namespace Shared.Managers
                     var ageAndWeightSplit = ageAndWeight.InnerText.Trim().Split("\r\n");
                     var age = ageAndWeightSplit[0];
                     var weight = ageAndWeightSplit[1];
-                    var attire = ageAndWeight.SelectSingleNode(".//span")?.InnerText?.Trim() ?? "";
+                    var attire = ageAndWeight.SelectSingleNode(".//span")?.InnerText?.Trim().Replace("&nbsp","") ?? "";
                     var trainerAndJockey = container.SelectNodes(".//span[contains(@class,'icon-text__t')]");
                     var jockey = "";
                     var trainer = "";
@@ -427,6 +428,15 @@ namespace Shared.Managers
                 return result;
 
             if (html.Contains("Bahrain"))
+                return result;
+
+            if (html.Contains("Qatar"))
+                return result;
+
+            if (html.Contains("Saudi"))
+                return result;
+
+            if (html.Contains("Uruguay"))
                 return result;
 
             result = html.Replace("Results", "").Trim();

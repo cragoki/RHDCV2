@@ -1,6 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Shared.Algorithms;
-using Shared.Algorithms.Interfaces;
 using Shared.Managers;
 using Shared.Managers.Interfaces;
 
@@ -19,11 +17,6 @@ namespace Shared.Configuration
             services.AddScoped<IEventManager, EventManager>();
             services.AddScoped<IRaceManager, RaceManager>();
             services.AddScoped<IRaceHorseManager, RaceHorseManager>();
-            services.AddScoped<IAlgorithmManager, AlgorithmManager>();
-
-            //Algorithms
-            services.AddScoped<IAlphabeticalAlgorithm, AlphabeticalAlgorithm>();
-
 
         }
     }

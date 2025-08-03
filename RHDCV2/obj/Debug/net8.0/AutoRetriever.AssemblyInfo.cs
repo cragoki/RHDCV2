@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AutoRetriever")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0ccedfcde7cf3318e8b7d835d920162eccc4c22f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fc5e97f0fd01c94b2e7ae79249cea1251ae44590")]
 [assembly: System.Reflection.AssemblyProductAttribute("AutoRetriever")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AutoRetriever")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -212,6 +212,9 @@ namespace Shared.Managers
             var newIdProperty = typeof(T).GetProperty("Id");
             if (newIdProperty != null)
             {
+                //Add ELO Data
+
+
                 return (int)newIdProperty.GetValue(newEntity);
             }
 
