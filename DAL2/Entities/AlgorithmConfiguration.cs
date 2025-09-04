@@ -11,6 +11,8 @@ namespace DAL.Entities
         public virtual Algorithm AlgorithmEntity { get; set; }
         public int VariableId { get; set; }
         public virtual Variable VariableEntity { get; set; }
+        public int? RaceCourseId { get; set; }
+        public virtual RaceCourse RaceCourse { get; set; }
         [Precision(18, 4)]
         public decimal Importance { get; set; }
     }
