@@ -8,5 +8,6 @@ namespace DAL.Entities
         public int RaceCourseId { get; set; }
         public virtual RaceCourse RaceCourse { get; set; }
         public DateTime Date { get; set; }
+        public bool IsToday { get; set; }
     }
 }

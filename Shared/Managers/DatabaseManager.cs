@@ -1,13 +1,14 @@
-﻿using DAL.DbRHDCV2Context;
+﻿using System.Diagnostics;
+using DAL.DbRHDCV2Context;
 using DAL.Entities;
 using DAL.Entities.MappingTables;
 using DAL.Enums;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Shared.Constants;
 using Shared.Helpers;
 using Shared.Managers.Interfaces;
 using Shared.Models.ScrapingModels;
-using System.Diagnostics;
 
 namespace Shared.Managers
 {
@@ -24,7 +25,34 @@ namespace Shared.Managers
             _error = error;
         }
 
-        public async Task AddEventAndRaceData(List<ScrapingEventModel> events)
+        public async Task ClearTodaysRaces() 
+        {
+            try
+            {
+                var todaysEvents = _context.tb_event.Where(x => x.IsToday);
+
+                if(todaysEvents.Count() == 0)
+                {
+                    return;
+                }
+
+                var eventIds = todaysEvents.Select(x => x.Id).Distinct();
+                var races = _context.tb_race.Where(x => eventIds.Contains(x.EventId));
+                var raceIds = races.Select(x => x.Id).Distinct();
+                var raceHorses = _context.tb_race_horse.Where(x => raceIds.Contains(x.RaceId));
+
+                raceHorses.ExecuteDelete();
+                races.ExecuteDelete();
+                todaysEvents.ExecuteDelete();
+            }
+            catch (Exception ex) 
+            {
+                await _error.LogError("tb_event", "DatabaseManager.cs", "ClearTodaysRaces", ErrorType.Database, ex.StackTrace!, ex.InnerException?.Message ?? "", ex.Message!);
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task AddEventAndRaceData(List<ScrapingEventModel> events, bool isToday)
         {
             var addedEvents = new List<DaysEvent>();
             try
@@ -37,6 +65,7 @@ namespace Shared.Managers
                     {
                         Date = e.EventDate,
                         RaceCourseId = raceCourse,
+                        IsToday = isToday
                     };
 
                     _context.tb_event.Add(eventEntity);

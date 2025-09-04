@@ -23,7 +23,7 @@ namespace AutoRetriever
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            Console.WriteLine("Initializing RHDC AutoRetriever");
+            Console.WriteLine($"Initializing {WorkerServiceConstants.AutoRetriever}");
 
             while (!stoppingToken.IsCancellationRequested)
             {
@@ -35,17 +35,19 @@ namespace AutoRetriever
                 {
                     //Log Error 
                     await _error.LogError("tb_worker_service", "AutoRetrieverWorker.cs", "ExecuteAsync", ErrorType.Setup, null!, null!, null!);
-                    throw new Exception("Auto Retriever Worker not found in the database");
+                    throw new Exception($"{WorkerServiceConstants.AutoRetriever} not found in the database");
                 }
 
                 if (!worker.Enabled) 
                 {
-                    Console.WriteLine("Auto Retriever has been disabled");
+                    Console.WriteLine($"{WorkerServiceConstants.AutoRetriever} has been disabled");
                     return;
                 }
 
                 if (worker.Start)
                 {
+                    await _dataManager.ClearTodaysRaces();
+
                     //Identify the last day we are missing race data for, and produce a scrape url for that day
                     var urlData = _webScrapingManager.GenerateNextResultRetrievalURL();
                     var existingRetrieverLog = _context.tb_auto_retriever_log.FirstOrDefault(x => x.DateRetrieved.Date == urlData.EventDate.Date);
@@ -58,7 +60,7 @@ namespace AutoRetriever
                             Console.WriteLine("Auto Retriever is up to date");
                             return;
                         }
-                        Console.WriteLine($"Auto Retriever Started, Scraping races for date {urlData.EventDate.ToString("dd-MM-yyy")}");
+                        Console.WriteLine($"{WorkerServiceConstants.AutoRetriever} Started, Scraping races for date {urlData.EventDate.ToString("dd-MM-yyy")}");
 
                         //Get the Events for the chosen day's base page
                         var htmlDoc = await _webScrapingManager.Scrape(urlData.Url!);
@@ -69,13 +71,13 @@ namespace AutoRetriever
                         Console.WriteLine($"Scraping successful, adding data to db...");
 
                         //Adding Scraped Data to the database
-                        await _dataManager.AddEventAndRaceData(scrapedData);
+                        await _dataManager.AddEventAndRaceData(scrapedData, false);
 
                         Console.WriteLine($"Events Added.");
 
 
                         //Lastly, delete all resolved errors...
-                        Console.WriteLine("Auto Retriever Complete");
+                        Console.WriteLine($"{WorkerServiceConstants.AutoRetriever} Complete");
 
                         if (existingRetrieverLog == null)
                         {
@@ -99,7 +101,7 @@ namespace AutoRetriever
                             existingRetrieverLog.Retries = existingRetrieverLog.Retries + 1;
                         }
 
-                        Console.WriteLine("Auto Retriever Failed...");
+                        Console.WriteLine($"{WorkerServiceConstants.AutoRetriever} Failed...");
 
                     }
 
@@ -109,7 +111,7 @@ namespace AutoRetriever
                 }
                 else 
                 {
-                    Console.WriteLine("Auto Retriever Sleeping...");
+                    Console.WriteLine($"{WorkerServiceConstants.AutoRetriever} Sleeping...");
                 }
 
                 Thread.Sleep((int)TimeSpan.FromMinutes(1).TotalMilliseconds);

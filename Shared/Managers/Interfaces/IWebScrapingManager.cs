@@ -10,5 +10,6 @@ namespace Shared.Managers.Interfaces
         Task AddAutoretrieverLog(DateTime date, bool success, string note, int retries = 0);
         Task<HtmlDocument> Scrape(string url);
         Task<List<ScrapingEventModel>> ScrapeAllData(HtmlDocument htmlDoc, DateTime raceDate);
+        Task<List<ScrapingEventModel>> ScrapeTodaysData(HtmlDocument htmlDoc, DateTime raceDate);
     }
 }

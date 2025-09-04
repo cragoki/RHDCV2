@@ -1,5 +1,4 @@
 ﻿using DAL.DbRHDCV2Context;
-using DAL.Entities.MappingTables;
 using DAL.Enums;
 using HtmlAgilityPack;
 using Microsoft.Extensions.Configuration;
@@ -104,6 +103,7 @@ namespace Shared.Managers
 
         public async Task<List<ScrapingEventModel>> ScrapeAllData(HtmlDocument htmlDoc, DateTime raceDate) 
         {
+
             var eventData = ScrapeEventData(htmlDoc, raceDate);
             
             foreach (var e in eventData.Where(x => !String.IsNullOrEmpty(x.CourseName)))
@@ -113,7 +113,7 @@ namespace Shared.Managers
             
                 foreach (var race in raceData)
                 {
-                    var raceHorseData = await ScrapeRaceHorseData(race);
+                    var raceHorseData = await ScrapeRaceHorseData(race, false);
                     if (raceHorseData.Count() == 0) 
                     {
                         race.Abandoned = true;
@@ -126,10 +126,36 @@ namespace Shared.Managers
             return eventData;
         }
 
+        public async Task<List<ScrapingEventModel>> ScrapeTodaysData(HtmlDocument htmlDoc, DateTime raceDate)
+        {
+
+            var eventData = ScrapeTodaysEventData(htmlDoc, raceDate);
+
+            foreach (var e in eventData.Where(x => !String.IsNullOrEmpty(x.CourseName)))
+            {
+                var raceData = await ScrapeTodaysRaceData(htmlDoc, e);
+                e.Races = raceData;
+
+                foreach (var race in raceData)
+                {
+                    var raceHorseData = await ScrapeRaceHorseData(race, true);
+                    if (raceHorseData.Count() == 0)
+                    {
+                        race.Abandoned = true;
+                    }
+                    race.RaceHorses = raceHorseData;
+                }
+
+            }
+
+            return eventData;
+        }
+
         private List<ScrapingEventModel> ScrapeEventData(HtmlDocument htmlDoc, DateTime raceDate)
         {
             var result = new List<ScrapingEventModel>();
             var courses = htmlDoc.DocumentNode.SelectNodes("//div[contains(@class,'panel push--x-small')]");
+
             foreach (var course in courses) 
             {
                 var e = new ScrapingEventModel();
@@ -138,6 +164,31 @@ namespace Shared.Managers
                 //Get course name and validate its a course we want to use
                 var courseNameHtml = course.SelectSingleNode(".//h2[contains(@class, 'h6')]")?.InnerHtml ?? "";
                 var courseName = ValidateCourseName(courseNameHtml);
+
+                if (String.IsNullOrEmpty(courseName))
+                    continue;
+
+                e.CourseName = courseName;
+
+                result.Add(e);
+            }
+            return result;
+        }
+
+        private List<ScrapingEventModel> ScrapeTodaysEventData(HtmlDocument htmlDoc, DateTime raceDate)
+        {
+            var result = new List<ScrapingEventModel>();
+            //var courses = htmlDoc.DocumentNode.SelectNodes("//div[contains(@class,'panel push--x-small')]");
+            var courses = htmlDoc.DocumentNode.SelectNodes("//div[contains(@class,'push--x-small country-filters-filter-uk')]");
+
+            foreach (var course in courses)
+            {
+                var e = new ScrapingEventModel();
+                e.EventDate = raceDate;
+
+                //Get course name and validate its a course we want to use
+                var courseNameHtml = course.SelectSingleNode(".//h2[contains(@class, 'h6')]")?.InnerHtml ?? "";
+                var courseName = ValidateCourseName(courseNameHtml).Replace(" Racecards", "");
 
                 if (String.IsNullOrEmpty(courseName))
                     continue;
@@ -225,7 +276,85 @@ namespace Shared.Managers
             return result;
         }
 
-        private async Task<List<ScrapingRaceHorseModel>> ScrapeRaceHorseData(ScrapingRaceModel race)
+        private async Task<List<ScrapingRaceModel>> ScrapeTodaysRaceData(HtmlDocument htmlDoc, ScrapingEventModel e)
+        {
+            var result = new List<ScrapingRaceModel>();
+
+            try
+            {
+                //Using Regex to filter out brackets, and anything within the brackets
+                var courseNameForURL = Regex.Replace(e.CourseName, @"\s?\(.*?\)", "");
+
+                var sectionNode = htmlDoc.DocumentNode.SelectSingleNode("//section[@class='panel'][.//h2[normalize-space(text())='" + courseNameForURL + " Racecards" + "']]");
+                var raceData = sectionNode?.SelectNodes(".//div[contains(concat(' ', normalize-space(@class), ' '), ' meeting-list-entry ') and contains(concat(' ', normalize-space(@class), ' '), ' country-filters-filter-uk ')]");
+
+                foreach (var race in raceData)
+                {
+                    var toAdd = new ScrapingRaceModel();
+                    //Pick out the race Url and scrape the new page
+                    var extension = race.SelectSingleNode(".//a[contains(@class,'a--plain')]").Attributes["href"].Value;
+                    var raceUrl = BaseUrlWithExtension(extension);
+                    var raceHtml = await Scrape(raceUrl);
+
+                    //Now we have race data, we need to pick out the attributes
+                    toAdd.RaceUrl = raceUrl;
+
+                    //Race Type -> Check the race name for .Contains racetype. Unfortunately this is the only way we can do this...
+                    var raceHeader = raceHtml.DocumentNode.SelectSingleNode("//div[contains(@class,'race-header__details--primary')]");
+                    var raceNameDiv = raceHeader.SelectSingleNode(".//p[contains(@class,'p--medium')]");
+                    var raceName = raceNameDiv.SelectSingleNode(".//b").InnerHtml.ToLower();
+                    toAdd.RaceType = raceName.Contains("hurdle") ? RaceType.Hurdles :
+                        raceName.Contains("chase") ? RaceType.Chase :
+                        raceName.Contains("handicap") ? RaceType.Handicap :
+                        RaceType.Flat;
+                    var classAndAges = raceHeader.SelectSingleNode(".//p[not(@class)]").InnerHtml;
+                    var classAndAgesSplit = classAndAges.Split("|");
+                    var c = "";
+                    var a = "";
+
+                    //Irish Races don't have classes
+                    if (classAndAgesSplit.Count() < 2)
+                    {
+                        c = "0";
+                        a = classAndAgesSplit[0].Trim();
+                    }
+                    //Cut out division
+                    else if (classAndAgesSplit.Count() > 2)
+                    {
+                        c = classAndAgesSplit[1].Trim().ToLower().Replace("class ", "");
+                        a = classAndAgesSplit[2].Trim();
+                    }
+                    else
+                    {
+                        c = classAndAgesSplit[0].Trim().ToLower().Replace("class ", "");
+                        a = classAndAgesSplit[1].Trim();
+                    }
+
+                    toAdd.Class = c;
+                    toAdd.AgeCategoryName = a;
+
+                    var raceDetailsDiv = raceHtml.DocumentNode.SelectSingleNode("//div[contains(@class,'race-header__details--secondary')]");
+                    var going = raceDetailsDiv.SelectSingleNode(".//p[contains(@class,'p--medium')]").InnerHtml.ToLower();
+                    var distance = raceDetailsDiv.SelectSingleNode(".//div[contains(@class,'p--large')]").InnerHtml.ToLower();
+
+                    toAdd.GoingCategoryName = going.Trim();
+                    toAdd.DistanceCategoryName = distance.Trim();
+
+                    result.Add(toAdd);
+                }
+            }
+            catch (Exception ex)
+            {
+                await _error.LogError("", "WebScrapingManager.cs", "ScrapeRaceData", ErrorType.WebScraping, ex.StackTrace!, ex.InnerException?.Message ?? "", ex.Message!);
+                throw new Exception(ex.Message);
+            }
+
+
+            return result;
+        }
+
+        //TODO: Replace with today model
+        private async Task<List<ScrapingRaceHorseModel>> ScrapeRaceHorseData(ScrapingRaceModel race, bool isToday)
         {
             var result = new List<ScrapingRaceHorseModel>();
 
@@ -270,16 +399,34 @@ namespace Shared.Managers
                         string decoded = WebUtility.HtmlDecode(distanceBetween);
                         distanceBetween = StringHelper.ReplaceFractionsWithDecimals(decoded);
                     }
-
-                    raceHorse.Position = position.Trim();
                     raceHorse.HorseName = StringHelper.FormatName(horseName.Trim());
-                    raceHorse.Odds = StringHelper.FormatName(odds.Replace("J", "").ToLower()).Trim();
+
+
                     raceHorse.Age = age.Trim();
                     raceHorse.Weight = weight.Trim();
                     raceHorse.JockeyName = StringHelper.FormatName(jockey.Trim());
                     raceHorse.TrainerName = StringHelper.FormatName(trainer.Trim());
                     raceHorse.DistanceBetween = distanceBetween.Trim();
                     raceHorse.Attire = attire;
+
+                    if (odds == null || String.IsNullOrEmpty(odds))
+                    {
+                        raceHorse.Position = "0";
+                        //Going to need to scrape odds differently here...
+                        var nameSearch = raceHorse.HorseName.Replace(" ", "") + "-1";
+                        var oddsNode = raceContainer.SelectSingleNode("//div[@id='" + nameSearch + "']");
+                        if (oddsNode != null)
+                        {
+                            var spanNode = oddsNode.SelectSingleNode(".//span[@class='odds-value odds-value--fraction']");
+                            raceHorse.Odds = spanNode?.InnerText.Trim();
+                        }
+                    }
+                    else
+                    {
+                        raceHorse.Position = position.Trim();
+                        raceHorse.Odds = StringHelper.FormatName(odds.Replace("J", "").ToLower()).Trim();
+                    }
+
                     result.Add(raceHorse);
                 }
             }
