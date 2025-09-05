@@ -1,25 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\crarod\\Documents\\GitHub\\RHDCV2\\RHDCV2\\AutoRetriever.csproj": {}
+    "C:\\Users\\PC\\Documents\\GitHub\\RHDCV2\\RHDCV2\\AutoRetriever.csproj": {}
   },
   "projects": {
-    "C:\\Users\\crarod\\Documents\\GitHub\\RHDCV2\\DAL2\\DAL.csproj": {
+    "C:\\Users\\PC\\Documents\\GitHub\\RHDCV2\\DAL2\\DAL.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\crarod\\Documents\\GitHub\\RHDCV2\\DAL2\\DAL.csproj",
+        "projectUniqueName": "C:\\Users\\PC\\Documents\\GitHub\\RHDCV2\\DAL2\\DAL.csproj",
         "projectName": "DAL",
-        "projectPath": "C:\\Users\\crarod\\Documents\\GitHub\\RHDCV2\\DAL2\\DAL.csproj",
-        "packagesPath": "C:\\Users\\crarod\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\crarod\\Documents\\GitHub\\RHDCV2\\DAL2\\obj\\",
+        "projectPath": "C:\\Users\\PC\\Documents\\GitHub\\RHDCV2\\DAL2\\DAL.csproj",
+        "packagesPath": "C:\\Users\\PC\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\PC\\Documents\\GitHub\\RHDCV2\\DAL2\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files\\DevExpress 24.2\\Components\\Offline Packages",
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\crarod\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 24.2.config",
+          "C:\\Users\\PC\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -28,7 +26,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\DevExpress 24.2\\Components\\System\\Components\\Packages": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -46,8 +44,7 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        },
-        "SdkAnalysisLevel": "9.0.300"
+        }
       },
       "frameworks": {
         "net8.0": {
@@ -106,26 +103,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.300/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\crarod\\Documents\\GitHub\\RHDCV2\\RHDCV2\\AutoRetriever.csproj": {
+    "C:\\Users\\PC\\Documents\\GitHub\\RHDCV2\\RHDCV2\\AutoRetriever.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\crarod\\Documents\\GitHub\\RHDCV2\\RHDCV2\\AutoRetriever.csproj",
+        "projectUniqueName": "C:\\Users\\PC\\Documents\\GitHub\\RHDCV2\\RHDCV2\\AutoRetriever.csproj",
         "projectName": "AutoRetriever",
-        "projectPath": "C:\\Users\\crarod\\Documents\\GitHub\\RHDCV2\\RHDCV2\\AutoRetriever.csproj",
-        "packagesPath": "C:\\Users\\crarod\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\crarod\\Documents\\GitHub\\RHDCV2\\RHDCV2\\obj\\",
+        "projectPath": "C:\\Users\\PC\\Documents\\GitHub\\RHDCV2\\RHDCV2\\AutoRetriever.csproj",
+        "packagesPath": "C:\\Users\\PC\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\PC\\Documents\\GitHub\\RHDCV2\\RHDCV2\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files\\DevExpress 24.2\\Components\\Offline Packages",
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\crarod\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 24.2.config",
+          "C:\\Users\\PC\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -134,15 +129,15 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\DevExpress 24.2\\Components\\System\\Components\\Packages": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\crarod\\Documents\\GitHub\\RHDCV2\\Shared\\Shared.csproj": {
-                "projectPath": "C:\\Users\\crarod\\Documents\\GitHub\\RHDCV2\\Shared\\Shared.csproj"
+              "C:\\Users\\PC\\Documents\\GitHub\\RHDCV2\\Shared\\Shared.csproj": {
+                "projectPath": "C:\\Users\\PC\\Documents\\GitHub\\RHDCV2\\Shared\\Shared.csproj"
               }
             }
           }
@@ -156,8 +151,7 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        },
-        "SdkAnalysisLevel": "9.0.300"
+        }
       },
       "frameworks": {
         "net8.0": {
@@ -188,26 +182,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.300/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\crarod\\Documents\\GitHub\\RHDCV2\\Shared\\Shared.csproj": {
+    "C:\\Users\\PC\\Documents\\GitHub\\RHDCV2\\Shared\\Shared.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\crarod\\Documents\\GitHub\\RHDCV2\\Shared\\Shared.csproj",
+        "projectUniqueName": "C:\\Users\\PC\\Documents\\GitHub\\RHDCV2\\Shared\\Shared.csproj",
         "projectName": "Shared",
-        "projectPath": "C:\\Users\\crarod\\Documents\\GitHub\\RHDCV2\\Shared\\Shared.csproj",
-        "packagesPath": "C:\\Users\\crarod\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\crarod\\Documents\\GitHub\\RHDCV2\\Shared\\obj\\",
+        "projectPath": "C:\\Users\\PC\\Documents\\GitHub\\RHDCV2\\Shared\\Shared.csproj",
+        "packagesPath": "C:\\Users\\PC\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\PC\\Documents\\GitHub\\RHDCV2\\Shared\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files\\DevExpress 24.2\\Components\\Offline Packages",
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\crarod\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 24.2.config",
+          "C:\\Users\\PC\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -216,15 +208,15 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\DevExpress 24.2\\Components\\System\\Components\\Packages": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\crarod\\Documents\\GitHub\\RHDCV2\\DAL2\\DAL.csproj": {
-                "projectPath": "C:\\Users\\crarod\\Documents\\GitHub\\RHDCV2\\DAL2\\DAL.csproj"
+              "C:\\Users\\PC\\Documents\\GitHub\\RHDCV2\\DAL2\\DAL.csproj": {
+                "projectPath": "C:\\Users\\PC\\Documents\\GitHub\\RHDCV2\\DAL2\\DAL.csproj"
               }
             }
           }
@@ -238,8 +230,7 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        },
-        "SdkAnalysisLevel": "9.0.300"
+        }
       },
       "frameworks": {
         "net8.0": {
@@ -266,7 +257,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.300/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
