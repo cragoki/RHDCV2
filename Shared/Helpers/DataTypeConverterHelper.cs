@@ -31,8 +31,13 @@
             if (string.IsNullOrWhiteSpace(fractionalOdds))
                 return 0;
 
-            if (fractionalOdds == "evens")
+            if (fractionalOdds == "evens" || fractionalOdds == "evn")
                 return 2;
+            if (fractionalOdds == "SP")
+            {
+                return 0;
+            }
+
             var parts = fractionalOdds.Split('/');
             if (parts.Length != 2)
                 throw new ArgumentException("Invalid fractional odds format. Expected format: 'a/b'.");

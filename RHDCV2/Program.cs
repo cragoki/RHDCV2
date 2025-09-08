@@ -21,7 +21,9 @@ namespace AutoRetriever
                 .ConfigureAppConfiguration((hostContext, configBuilder) =>
                 {
                     // Add appsettings.json configuration
-                    configBuilder.SetBasePath("C:\\Users\\PC\\Documents\\GitHub\\RHDCV2\\RHDCV2")
+                    string baseDir = AppContext.BaseDirectory;
+
+                    configBuilder.SetBasePath(Path.Combine(baseDir, @"..\..\.."))
                                  .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
                 })
                 .ConfigureLogging(logging =>
