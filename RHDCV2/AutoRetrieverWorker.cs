@@ -44,6 +44,8 @@ namespace AutoRetriever
                     return;
                 }
 
+                var time = DateTime.Now;
+
                 if (worker.Start)
                 {
                     await _dataManager.ClearTodaysRaces();
@@ -55,9 +57,10 @@ namespace AutoRetriever
                     try
                     {
 
-                        if (urlData.EventDate.Date < DateTime.Now.AddYears(-3)) 
+                        if (urlData.EventDate.Date < DateTime.Now.AddYears(-1)) 
                         {
                             Console.WriteLine("Auto Retriever is up to date");
+                            //Set Start = false and trigger scrape todays races automator.
                             return;
                         }
                         Console.WriteLine($"{WorkerServiceConstants.AutoRetriever} Started, Scraping races for date {urlData.EventDate.ToString("dd-MM-yyy")}");
